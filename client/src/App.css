@@ -1,0 +1,251 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f0f8ff4a;
+  /* background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20220122/pngtree-colorful-buttefly-spring-field-freedom-flora-meadow-photo-image_4879368.jpg"); */
+  /* background: rgba(222, 63, 63, 0.4); */
+}
+.Home {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.no-border{
+  border:none;
+}
+.bg-tertiary{
+  background-color: #eedad0;
+}
+.container-data{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:90vh;
+}
+.button-to-go{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main-content {
+    margin-top: 64px; /* Adjust this value based on the height of your Navheader */
+    padding: 20px; /* Optional: Add padding for content spacing */
+}
+.containt-header{
+  font-size: 14px;
+  font-weight: lighter;
+  color: #8a8c8d;
+  padding: 7px;
+}
+.containt-header-admin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 27px;
+  font-weight: lighter;
+  color: #8a8c8d;
+  padding: 7px;
+}
+.contain-num{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  font-weight: lighter;
+  color: #857e75;
+}
+.contain-num-admin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: lighter;
+  color: #857e75;
+}
+compl-num-cont-admin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  box-shadow: 3px 3px 5px 0px rgba(171, 168, 168, 0.1), 1px 1px 5px 0px rgba(163, 160, 160, 0.2);
+  background-color: white;
+}
+.compl-num-cont{
+  border-radius: 16px;
+  box-shadow: 3px 3px 5px 0px rgba(171, 168, 168, 0.1), 1px 1px 5px 0px rgba(163, 160, 160, 0.2);
+  background-color: white;
+}
+.drop-complaint-box{
+  margin-top: 27px;
+  padding: 3px;
+}
+.drop-containt-butt{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 23px;
+  border-radius: 12px;
+  padding: 6px;
+  margin: 8px;
+}
+.button{
+  height: 50px;
+  border: 1px solid #e0effc;
+  box-shadow: rgba(171, 168, 168, 0.1) 3px 3px 5px 0px, rgba(163, 160, 160, 0.2) 1px 1px 5px 0px;
+}
+.contain-complaints{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  padding: 10px;
+  color: #828689;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  text-align: center;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  width: 400px;
+  background: #fff;
+  border: 1px solid #dddfe2;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+  border-radius: 8px;
+  padding: 1rem;
+  align-items: center;
+  text-align: center;
+}
+
+.login-container > input {
+  border-radius: 8px;
+  border: 2px solid #dddfe2;
+  outline: none;
+  color: #1d2129;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  width: 92%;
+  font-size: 1rem;
+}
+
+.login-container > .button {
+  background: #1877f2;
+  border: 1px solid #1877f2;
+  color: #fff;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+} 
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.register-container {
+  text-align: center;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  width: 400px;
+  background: #fff;
+  border: 1px solid #dddfe2;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+  border-radius: 8px;
+  padding: 1rem;
+  align-items: center;
+  text-align: center;
+}
+
+.register-container > input {
+  border-radius: 8px;
+  border: 2px solid #dddfe2;
+  outline: none;
+  color: #1d2129;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  width: 92%;
+  font-size: 1rem;
+}
+.register-container > .button {
+  background: #1877f2;
+  border: 1px solid #1877f2;
+  color: #fff;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+}
+
+.register-form{
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+  /* background-color: #3a2194;
+  box-shadow: 0 2px 4px rgba(35, 29, 220, 0.84), 0 8px 16px rgba(48, 25, 161, 0.4); */
+  padding: 20px;
+  border-radius: 10px;
+}
+.register-form-inside{
+  background-color: white;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+.card-text{
+  overflow: hidden;
+}
+.card-holder {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.card {
+  max-width: 25rem;
+  flex: 1 0 45%;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.card-header, .card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3px;
+  background-color: transparent;
+}
+
+.card-body {
+  overflow: scroll;
+  max-height: 150px;
+  background-color: transparent;
+}
+
+.delete-button {
+  background-color: lightblue;
+  border-radius: 10px;
+}
