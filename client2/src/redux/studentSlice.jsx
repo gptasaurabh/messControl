@@ -28,7 +28,7 @@ const studentSlice = createSlice({
       state.roomNo = action.payload.roomNo;
       state.token = action.payload.token;
     },
-    logout: (state) => {
+    logoutStudent: (state) => {
       // Reset user-related information on logout
       state.name = null;
       state.email = null;
@@ -40,5 +40,5 @@ const studentSlice = createSlice({
   },
 });
 
-export const { register_student, redirect_to_dashboard, logout } = studentSlice.actions;
+export const { register_student, redirect_to_dashboard, logoutStudent } = studentSlice.actions;
 export default studentSlice.reducer;

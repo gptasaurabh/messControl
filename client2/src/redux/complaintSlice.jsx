@@ -38,10 +38,18 @@ const complaintSlice = createSlice({
     },
     get_comments: (state,action) => {
       console.log("getting comments");
+    },
+    update_vote_counts:(state,action) => {
+      const { complaintId, upCount, downCount } = action.payload;
+      const index = state.complaints.findIndex(complaint => complaint._id === complaintId);
+      if (index !== -1) {
+        state.complaints[index].upCount = upCount;
+        state.complaints[index].downCount = downCount;
+      }
     }
   },
 });
 
-export const { add_complaint, get_all_complaints, get_my_complaints, delete_complaint,add_comment,get_comments } = complaintSlice.actions;
+export const { add_complaint, get_all_complaints, get_my_complaints, delete_complaint,add_comment,get_comments,update_vote_counts } = complaintSlice.actions;
 
 export default complaintSlice.reducer;

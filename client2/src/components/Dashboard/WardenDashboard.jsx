@@ -15,7 +15,7 @@ import Complaintcard from '../Complaintcard';
 const WardenDashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [updateMenu, setUpdateMenu] = useState(false);
-  const wardenData = useSelector((state) => state.students);
+  const wardenData = useSelector((state) => state.wardens);
   const [showMyComplaints, setShowMyComplaints] = useState(true);
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
@@ -73,8 +73,9 @@ const WardenDashboard = () => {
   };
 
   const heading = {
+    display:'flex',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '20px',
+    padding: '5px',
     borderRadius: '10px',
     border: '2px solid rgba(255, 255, 255, 0.3)',
   };
@@ -97,9 +98,8 @@ const WardenDashboard = () => {
     <div style={pageStyle}>
       {/* <Navbar /> */}
       <div className="container mt-5" style={heading}>
-        <div className="row">
           <div className="col-md-6 mt-2">
-            <span style={{ fontSize: '30px' }}>Hostel Name : {wardenData.hostelName}</span> 
+            <span style={{ fontSize: '30px' }}>Hostel Name : {wardenData.hostel}</span> 
 
           </div>
           <div className="col-md-5 mt-3" align="right">
@@ -108,7 +108,6 @@ const WardenDashboard = () => {
           <div className="col-md-1  d-flex justify-content-center align-items-center">
             <img src={defaultProfilePic} alt="Profile" style={profilePicStyle} />
           </div>
-        </div>
       </div>
 
       <div className="container">

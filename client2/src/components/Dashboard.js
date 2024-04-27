@@ -83,7 +83,7 @@ const Dashboard = () => {
             })
           );
         } else {
-          toast.error("Cant log in!");
+          toast.error("Can't log in!..");
           console.log("Error occured on refreshing");
         }
       })

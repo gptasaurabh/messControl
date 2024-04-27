@@ -64,4 +64,5 @@ rootRoute.get('/student/verify', authSL, verify);
 
 rootRoute.get('/verifyLink', verifyLink);
 
+
 module.exports = rootRoute
