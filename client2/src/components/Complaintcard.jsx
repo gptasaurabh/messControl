@@ -33,7 +33,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
   const [studentName, setStudentName] = useState("");
   const dispatch = useDispatch();
 
-  console.log(complaint.comments);
+  console.log("complaint card",complaint.upvoteId.length);
 
   useEffect(() => {
     const fetchStudentName = async () => {
@@ -174,14 +174,14 @@ const handleDownClick = async () => {
                 className="fa-solid fa-circle-up"
                 onClick={handleUpClick}
               ></i>{" "}
-              {upCount}
+              {complaint.upvoteId.length}
             </h4>
             <h4>
               <i
                 className="fa-solid fa-circle-down"
                 onClick={handleDownClick}
               ></i>{" "}
-              {downCount}
+              {complaint.downvoteId.length}
             </h4>
           </div>
           <div className="col-md-4 offset-4 ">

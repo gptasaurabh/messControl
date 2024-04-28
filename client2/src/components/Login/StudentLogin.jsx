@@ -28,6 +28,16 @@ const StudentLogin = () => {
       password,
     })
       .then((res) => {
+        console.log(res.data.status);
+        if(res.data.status===301){
+          console.log("hi")
+          axios.post('http://localhost:5500/student/verify',{
+            email
+          }).then((res)=>{
+            toast.error('Check your email to verify your account');
+          })
+          return;
+        }
         const token = res.data.data.token;
         // console.log("Token is : "+token);
         localStorage.setItem('token', token);

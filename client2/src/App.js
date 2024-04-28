@@ -11,6 +11,8 @@ import Register from './components/Register';
 import Contributors from './components/Contributors';
 import Error from './components/Error';
 import Toast from './Toast';
+import Verify from './verification/Verify';
+import Feedback from './feedback/Feedback';
 
 function App() {
   const navigate = useNavigate();
@@ -30,7 +32,9 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} /> */}
+        {/* <Route path="/" element={<Verify />} /> */}
+        <Route path="/" element={<Feedback />} />
         <Route path="*" element={<Error />} />
 
         {isAuthenticatedStudent && <Route path="/dashboard" element={<Dashboard />} />}
