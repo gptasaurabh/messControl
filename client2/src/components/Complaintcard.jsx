@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { add_comment, delete_complaint } from "../redux/complaintSlice";
 import axios from "axios";
 import styled, { keyframes } from 'styled-components';
@@ -32,15 +32,19 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
   const [showCommentsOnCard, setShowCommentsOnCard] = useState(false); 
   const [studentName, setStudentName] = useState("");
   const dispatch = useDispatch();
+  const studentDetails_name = useSelector( state => state.students.name);
 
-  console.log("complaint card",complaint.upvoteId.length);
+  // console.log("complaint card",studentDetails_name);
+
 
   useEffect(() => {
     const fetchStudentName = async () => {
+      // console.log("hi from inside")
       try {
         const response = await axios.get(
           `http://localhost:5500/student/getStudent/${complaint.studentId}`
         );
+        // console.log("student details",response);
         setStudentName(response.data.studentName);
       } catch (error) {
         console.error("Error fetching student name:", error);
@@ -50,13 +54,6 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
     fetchStudentName();
   }, [complaint.studentId]);
 
-  // const handleUpClick = () => {
-  //   setUpCount(upCount + 1);
-  // };
-
-  // const handleDownClick = () => {
-  //   setDownCount(downCount + 1);
-  // };
 
   const openComment = () => {
     setShowCommentsOnCard((prev) => !prev);
@@ -94,9 +91,10 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
       .post("http://localhost:5500/student/addComment", {
         complaintId: complaint._id,
         comment: newComment,
-        writtenBy: "", // Replace with the actual user identifier
+        writtenBy: studentName,
       })
       .then((res) => {
+        console.log("inside comment",res);
         dispatch(add_comment(res.data.data.comments));
         console.log("Comment added");
       })

@@ -66,11 +66,13 @@ const deleteComplaint = async function(req, res){
 }
 
 const addComment = async function(req, res){
+    console.log(req.body)
     const {comment, complaintId} = req.body;
     let complaint = await getComplaintById(complaintId);
     let student = await getStudentbyId(req.sid);
+    // console.log(student);
     if(student && complaint &&student.hostelName === complaint.hostelName){
-        res.send(await addCommentInComplaint({comment, complaintId, writtenBy: req.sid}));
+        res.send(await addCommentInComplaint({comment, complaintId, writtenBy: student.name}));
     }
     else{
         res.send({status: 400, message: "complaint doesnt exist"});
