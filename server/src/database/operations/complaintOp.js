@@ -195,10 +195,20 @@ const removeUpvote = async function(data){
 const removeDownvote = async function(data){
     const complaint = await ComplaintSchema.findOne({_id: data.complaintId});
     if(complaint){
-        let newDownvoteId = complaint.upvoteId.filter(id=>id!=data._id);
+        let newDownvoteId = complaint.downvoteId.filter(id=>id!=data._id);
         complaint.downvoteId = newDownvoteId;
         await complaint.save();
     }
+}
+
+const totalUpvote = async function(data){
+    const complaint = await ComplaintSchema.findOne({_id: data.complaintId});
+    return complaint.upvoteId.length;
+}
+
+const totalDownvote = async function(data){
+    const complaint = await ComplaintSchema.findOne({_id: data.complaintId});
+    return complaint.downvoteId.length;
 }
 
 module.exports = {isDownvoted, isUpvoted, addDownvote, addUpvote, removeUpvote, removeDownvote, getAllComplaintsWithStatusByHostelName, getAllComplaints, toggleLikeInComment, getComplaintsByHostelName, getCommentById, getComplaintsByStudentId, createComplaint, getComplaintById,deleteComplaintbyId, addCommentInComplaint, deleteCommentById}

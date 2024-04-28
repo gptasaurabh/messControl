@@ -24,13 +24,13 @@ rootRoute.post('/logout',logout)
 
 // rootRoute.post('/loginAdmin',loginAdmin)
 
-rootRoute.post('/loginChiefWarden', loginChiefWarden)
+// rootRoute.post('/loginChiefWarden', loginChiefWarden)
 
-rootRoute.post('/registerChiefWarden', registerChiefWarden)
+// rootRoute.post('/registerChiefWarden', registerChiefWarden)
 
-rootRoute.post('/chiefWarden/registerWarden', authCW, registerWarden)
+// rootRoute.post('/chiefWarden/registerWarden', authCW, registerWarden)
 
-rootRoute.post('/chiefWarden/registerHostel', authCW, registerHostel)
+// rootRoute.post('/chiefWarden/registerHostel', authCW, registerHostel)
 
 rootRoute.get('/getAllHostels', getAllHostels);
 
@@ -56,16 +56,20 @@ rootRoute.post('/warden/login', loginWarden)
 
 rootRoute.get('/warden/dashboard', authW, wardenDashboard)
 
-rootRoute.get('/chiefWarden/dashboard', authCW, chiefWardeDashboard)
+// rootRoute.get('/chiefWarden/dashboard', authCW, chiefWardeDashboard)
 
-rootRoute.get('/chiefWarden/getWarden', authCW, getUnassignedWardens)
+// rootRoute.get('/chiefWarden/getWarden', authCW, getUnassignedWardens)
 
-rootRoute.post('/chiefWarden/getComplaints', authCW, getComplaintForHostel)
+// rootRoute.post('/chiefWarden/getComplaints', authCW, getComplaintForHostel)
 
 rootRoute.get('/student/verify', authSL, verify);
 
 rootRoute.get('/verifyLink', verifyLink);
 
 rootRoute.post('/fileUpload',upload.single('file'), uploadFile);
+
+rootRoute.get('/sudent/givenFeedback', authS);
+
+rootRoute.post('/student/giveFeedback', authS, addFeedback);
 
 module.exports = rootRoute
