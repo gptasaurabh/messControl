@@ -63,7 +63,7 @@ rootRoute.get('/warden/dashboard', authW, wardenDashboard)
 
 // rootRoute.post('/chiefWarden/getComplaints', authCW, getComplaintForHostel)
 
-rootRoute.get('/student/verify', authSL, verifyy);
+rootRoute.post('/student/verify', verifyy);
 
 rootRoute.get('/verifyLink', verifyLink);
 

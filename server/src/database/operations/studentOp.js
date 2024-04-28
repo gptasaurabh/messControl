@@ -82,6 +82,15 @@ const isVerifiedStudentId = async function(id){
     }
 }
 
+const getStudentIdbyEmail = async function(email){
+    // console.log("hi")
+    let student = await StudentSchema.findOne({email: email});
+    if(student){
+        return student._id;
+    }
+    return null;
+}
+
 const getStudentbyId = async function(_id){
     let student = await StudentSchema.findOne({_id: _id});
     if(student){
@@ -105,4 +114,4 @@ const getStudentbyId = async function(_id){
 
 // const getStudentby
 
-module.exports = {verifyStudent, isVerifiedStudentId, isValidStudentEmail, isValidStudentRegNo, createStudent, isValidStudentRecoveryEmail, isValidStudent, getStudentbyId, isValidStudentId}
+module.exports = {getStudentIdbyEmail, verifyStudent, isVerifiedStudentId, isValidStudentEmail, isValidStudentRegNo, createStudent, isValidStudentRecoveryEmail, isValidStudent, getStudentbyId, isValidStudentId}

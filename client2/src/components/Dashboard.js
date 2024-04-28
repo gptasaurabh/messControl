@@ -21,7 +21,7 @@ const Dashboard = () => {
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
 
-  console.log(allComplaints);
+  console.log("allcomplaints",allComplaints);
   console.log(myComplaints);
 
   const dispatch = useDispatch();
@@ -49,8 +49,6 @@ const Dashboard = () => {
 
 
   const fetchComplaintData = () => {
-    // console.log("Trying to fetch the data");
-    // console.log(localStorage.getItem('token'));
     const authToken = localStorage.getItem('token');
     axios.defaults.headers.common['Authorization'] = authToken;
 
@@ -256,7 +254,7 @@ const Dashboard = () => {
         <div className="flex-grow-1"></div>
 
         
-        <Modal show={showModal} onHide={closeModal}>
+ <Modal show={showModal} onHide={closeModal}>
   <form onSubmit={handleComplaint}>
     <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
       <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Add new complaint</Modal.Title>
@@ -297,9 +295,7 @@ const Dashboard = () => {
   </form>
 </Modal>
 
-
-
-        <Modal show={showMenu} onHide={closeMenu} size="lg" >
+<Modal show={showMenu} onHide={closeMenu} size="lg" >
   <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
     <Modal.Title className="text-center" style={{ fontSize: '20px' }}>Mess Menu</Modal.Title>
   </Modal.Header>

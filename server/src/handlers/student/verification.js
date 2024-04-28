@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { getStudentbyId, verifyStudent } = require('../../database/operations/studentOp');
+const { getStudentbyId, getStudentIdbyEmail, verifyStudent } = require('../../database/operations/studentOp');
 const VerifierSchema = require('../../database/schema/verifierSchema');
 const { response } = require('express');
 
@@ -15,6 +15,7 @@ const config = {
 }
 
 const verifyy = async function(req, res){
+  console.log("hiiiii")
     try{
         const transporter = nodemailer.createTransport(config);
         transporter.verify(function(error, success) {
@@ -24,6 +25,7 @@ const verifyy = async function(req, res){
               console.log('Server is ready to take our messages');
             }
           });
+        req.sid = await getStudentIdbyEmail(req.body.email);
         const student = await getStudentbyId(req.sid);
         let data = {};
         data.from = "miku006900@gmail.com";
@@ -43,7 +45,9 @@ const verifyy = async function(req, res){
             await newStudentVerifier.save()
         }
         const url = `http://localhost:5500/verifyLink?id=${req.sid}&OTP=${OTP}`;
-        data.html = `<p>Please use this verification link to verify your account.${url}</p>`
+        data.html = `<p><h4>Hello,</h4>
+        <p>Thank you for registering. Please verify your email by clicking on the link below:</p>
+        <a href="${url}">Verify Email</a></p>`
         console.log(data.html)
         // data.text = "hello this is a verification email"
         console.log(data);

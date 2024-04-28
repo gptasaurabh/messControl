@@ -38,6 +38,7 @@ function WardenLogin() {
           console.log("Token is : "+token);
           localStorage.setItem('token', token);
           axios.defaults.headers.common['Authorization'] = `${token}`;
+          console.log(token)
           dispatch(redirect_to_dashboard({
             email : email,
             token: token,

@@ -21,20 +21,21 @@ const loginStudent = async (req,res)=>{
     let student = await isValidStudent({email, password});
     // console.log(student)
     if(student){
-        if(await isVerifiedStudentId(student._id)){
+        if(!(await isVerifiedStudentId(student._id))){
             // verify
             res.send({status: 301, data:{message: "verify your email"}});
         }
         // console.log(process.env.SECRET_KEY)
-        const token = jwt.sign({_id: student._id}, process.env.SECRET_KEY,{
-            expiresIn: '7d'
-        })
-        res.send({status:200,
-            data: {
-                message: "student successfully logged in",
-                token: token
-            }})
-    
+        else{
+            const token = jwt.sign({_id: student._id}, process.env.SECRET_KEY,{
+                expiresIn: '7d'
+            })
+            res.send({status:200,
+                data: {
+                    message: "student successfully logged in",
+                    token: token
+                }})
+        }
     }
     else{
         res.send({status: 400, message: "wrong credentials!!"})
