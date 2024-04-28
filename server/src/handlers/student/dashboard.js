@@ -113,8 +113,9 @@ const upvote = async function(req, res){
     if(complaint){
         try{
             if(await isUpvoted({_id: req.sid, complaintId})){
-                await removeUpvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "removed upvote successfully"}})
+                // await removeUpvote({_id: req.sid, complaintId});
+                // res.send({status: 200, data: {message: "removed upvote successfully"}})
+                res.send({status: 200, data: {message: "Already upvoted"}})
             }
             else if(await isDownvoted({_id: req.sid, complaintId})){
                 await removeDownvote({_id: req.sid, complaintId});
@@ -123,6 +124,7 @@ const upvote = async function(req, res){
             }
             else{
                 await addUpvote({_id: req.sid, complaintId});
+                console.log(req.sid);
                 res.send({status: 200, data: {message: "upvoted successfully"}})
             }
         }
@@ -141,8 +143,9 @@ const downvote = async function(req, res){
     if(complaint){
         try{
             if(await isDownvoted({_id: req.sid, complaintId})){
-                await removeDownvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "removed downvote successfully"}})
+                // await removeDownvote({_id: req.sid, complaintId});
+                // res.send({status: 200, data: {message: "removed downvote successfully"}})
+                res.send({status: 200, data: {message: "Already downvoted"}});
             }
             else if(await isUpvoted({_id: req.sid, complaintId})){
                 await removeUpvote({_id: req.sid, complaintId});

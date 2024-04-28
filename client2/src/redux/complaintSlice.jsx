@@ -39,14 +39,7 @@ const complaintSlice = createSlice({
     get_comments: (state,action) => {
       console.log("getting comments");
     },
-    update_vote_counts:(state,action) => {
-      const { complaintId, upCount, downCount } = action.payload;
-      const index = state.complaints.findIndex(complaint => complaint._id === complaintId);
-      if (index !== -1) {
-        state.complaints[index].upCount = upCount;
-        state.complaints[index].downCount = downCount;
-      }
-    }
+    
   },
 });
 

@@ -41,10 +41,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchComplaintData();
-    const intervalId = setInterval(fetchComplaintData, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
+    // const intervalId = setInterval(fetchComplaintData, 1000);
+    // return () => {
+    //   clearInterval(intervalId);
+    // };
   }, []);
 
 
