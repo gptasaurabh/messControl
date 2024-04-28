@@ -1,5 +1,6 @@
 const express = require("express")
-const ComplaintSchema = require("../schema/schemaComplaint")
+const ComplaintSchema = require("../schema/schemaComplaint");
+const StudentSchema = require("../schema/schemaStudent");
 
 const getAllComplaints = async function(){
     return await ComplaintSchema.find({});
@@ -69,12 +70,16 @@ const deleteComplaintbyId = async function(_id){
     return response;
 }
 
+
+
+
 const addCommentInComplaint = async function(data){
     const doc = await ComplaintSchema.findOne({_id: data.complaintId});
     doc.comments.push({comment: data.comment, writtenBy: data.writtenBy});
     let response;
     await doc.save().then((doc)=>{
         response = {status: 200, data: doc};
+        console.log(response);
     }).catch((err)=>{
         response = {status: 400, message: "Error raised due to "+err};
     })
