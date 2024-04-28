@@ -108,9 +108,9 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
   const handleUpClick = async () => {
     try {
       const res = await axios.post('http://localhost:5500/student/upvote', {
-        complaintId: complaint._id,
-        sid: complaint.studentId
+        complaintId: complaint._id
       });
+      console.log(res)
       if (res.data.status === 200) {
         dispatch(update_vote_counts({ complaintId: complaint._id, upCount: res.data.data.upCount, downCount: res.data.data.downCount }));
       }

@@ -8,15 +8,16 @@ import { toast } from "react-toastify";
 import Complaintcard from "./Complaintcard";
 import Error from "./Error";
 import { redirect_to_dashboard } from "../redux/studentSlice";
-import menu from "../images/menu.png"
+// import menu from "../images/menu.png"
 import Footer from "./Footer";
 
 const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const studentData = useSelector((state) => state.students);
+  const wardenData = useSelector((state) => state.wardens);
   const [showMyComplaints, setShowMyComplaints] = useState(true);
-
+  const menu = wardenData.menu;
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
 
@@ -83,7 +84,7 @@ const Dashboard = () => {
             })
           );
         } else {
-          toast.error("Can't log in!..");
+          toast.error("Can't log in!");
           console.log("Error occured on refreshing");
         }
       })
