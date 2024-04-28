@@ -6,13 +6,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { redirect_to_dashboard,logout } from "../../redux/wardenSlice";
+import { redirect_to_dashboard,logoutWarden } from "../../redux/wardenSlice";
 import Footer from "../Footer";
 
-function ChiefWardenLogin() {
+function WardenLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.chiefwardens.token !== null);
+  const isAuthenticated = useSelector((state) => state.wardens.token !== null);
 
   // useSelector((state)=>{
   //   console.log(state);
@@ -33,18 +33,18 @@ function ChiefWardenLogin() {
         if(res.data.status===200){
           console.log(res);
           const token = res.data.data.token;
+          const name = res.data.data.warden.name;
+          const hostel = res.data.data.warden.hostelName;
           console.log("Token is : "+token);
           localStorage.setItem('token', token);
           axios.defaults.headers.common['Authorization'] = `${token}`;
           dispatch(redirect_to_dashboard({
             email : email,
-            token: token
+            token: token,
+            name: name,
+            hostel: hostel,
           }));
         }
-        
-        
-
-
         navigate("/warden");
       })
       .catch((err) => {
@@ -62,7 +62,7 @@ function ChiefWardenLogin() {
 
   // Handle logout
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutWarden());
     localStorage.removeItem('token');
     navigate('/');
   };
@@ -177,5 +177,5 @@ const FormContainer = styled.div`
 `;
 
 
-export default ChiefWardenLogin;
+export default WardenLogin;
  

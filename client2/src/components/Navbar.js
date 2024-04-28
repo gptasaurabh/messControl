@@ -2,8 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {  useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/studentSlice';
-// import { logout } from '../redux/chiefWardenSlice';
+import { logoutStudent } from '../redux/studentSlice';
+import { logoutWarden } from '../redux/wardenSlice';
 import axios from 'axios';
 
 
@@ -12,6 +12,7 @@ import axios from 'axios';
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useSelector((state)=>{
     console.log(state);
@@ -20,28 +21,25 @@ const Navbar = () => {
   const wToken = useSelector((state)=> state.wardens);
   console.log(wToken);
   const isAuthenticatedStudent = useSelector((state) => state.students.token !== null);
-  const isAuthenticatedChiefWarden = useSelector((state) => state.chiefwardens.token !== null);
   const isAuthenticatedWarden = useSelector((state) => state.wardens.token !== null);
-  const location = useLocation();
 
   const handleLogout = () => {
-    // Dispatch the logout action to reset user-related information
-    console.log("Before logging out : "+localStorage.getItem('token'));
     axios.defaults.headers.common['Authorization'] = undefined;
     localStorage.removeItem('token');
     axios.post('http://localhost:5500/logout')
-    .then((res)=>{
-      console.log(res);
-      dispatch(logout());
-      // Redirect to the home page or login page
+    .then((res) => {
       console.log("Logged out successfully");
-      console.log("After logging out : "+localStorage.getItem('token'));
+      if (isAuthenticatedStudent) {
+        dispatch(logoutStudent());
+      }
+      if (isAuthenticatedWarden) {
+        dispatch(logoutWarden());
+      }
       navigate('/');
     })
-    .catch((err)=>{
-      console.log(err);
-    })
-    
+    .catch((err) => {
+      console.error("Error logging out:", err);
+    });
   };
 
   const [isHovered, setIsHovered] = React.useState(null);
@@ -65,7 +63,7 @@ const Navbar = () => {
             </h2>
           </div>
           <div className="nav-links p-2 text-light">
-            {((location.pathname === '/dashboard' && isAuthenticatedStudent) || (location.pathname ==='/admindashboard' && isAuthenticatedChiefWarden) || (location.pathname==='/warden') && isAuthenticatedWarden) ? (
+            {((location.pathname === '/dashboard' && isAuthenticatedStudent) || (location.pathname==='/warden') && isAuthenticatedWarden) ? (
               // If on the dashboard, show Logout tab
               <button className="text-light" style={logoutStyle} onClick={handleLogout}>
                 Logout

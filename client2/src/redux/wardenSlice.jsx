@@ -4,6 +4,8 @@ const initialState = {
   wardens: [],
   email: null,
   token : null,
+  name:null,
+  hostel:null,
 };
 
 const wardenSlice = createSlice({
@@ -18,9 +20,15 @@ const wardenSlice = createSlice({
       console.log(action.payload);
       state.email = action.payload.email;
       state.token = action.payload.token;
+      state.name = action.payload.name;
+      state.hostel = action.payload.hostel;
     },
-    logout: (state) => {
-      
+    logoutWarden: (state) => {
+      // Reset user-related information on logout
+      state.email = null;
+      state.token = null;
+      state.name = null;
+      state.hostel = null;
     },
     get_unassigned_wardens: (state,action) => {
 
@@ -30,5 +38,5 @@ const wardenSlice = createSlice({
   },
 });
 
-export const {  redirect_to_dashboard, logout, create_warden,get_unassigned_wardens } = wardenSlice.actions;
+export const {  redirect_to_dashboard, logoutWarden, create_warden,get_unassigned_wardens } = wardenSlice.actions;
 export default wardenSlice.reducer;

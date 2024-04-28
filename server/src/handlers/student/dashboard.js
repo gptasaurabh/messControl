@@ -107,61 +107,119 @@ const toggleLike = async function(req, res){
     }
 }
 
+// const upvote = async function(req, res){
+//     const {complaintId} = req.body;
+//     let complaint = getComplaintById(complaintId);
+//     if(complaint){
+//         try{
+//             if(await isUpvoted({_id: req.sid, complaintId})){
+//                 await removeUpvote({_id: req.sid, complaintId});
+//                 res.send({status: 200, data: {message: "removed upvote successfully"}})
+//             }
+//             else if(await isDownvoted({_id: req.sid, complaintId})){
+//                 await removeDownvote({_id: req.sid, complaintId});
+//                 await addUpvote({_id: req.sid, complaintId});
+//                 res.send({status: 200, data: {message: "removed downvote and upvoted successfully"}})
+//             }
+//             else{
+//                 await addUpvote({_id: req.sid, complaintId});
+//                 res.send({status: 200, data: {message: "upvoted successfully"}})
+//             }
+//         }
+//         catch(err){
+//             res.send({status: 400, message: "error:"+err})
+//         }
+//     }
+//     else{
+//         res.send({status: 400, message: "error: complaint doesnt exist anymore"})
+//     }
+// }
+
+// const downvote = async function(req, res){
+//     const {complaintId} = req.body;
+//     let complaint = getComplaintById(complaintId);
+//     if(complaint){
+//         try{
+//             if(await isDownvoted({_id: req.sid, complaintId})){
+//                 await removeDownvote({_id: req.sid, complaintId});
+//                 res.send({status: 200, data: {message: "removed downvote successfully"}})
+//             }
+//             else if(await isUpvoted({_id: req.sid, complaintId})){
+//                 await removeUpvote({_id: req.sid, complaintId});
+//                 await addDownvote({_id: req.sid, complaintId});
+//                 res.send({status: 200, data: {message: "removed upvote and downvoted successfully"}})
+//             }
+//             else{
+//                 await addDownvote({_id: req.sid, complaintId});
+//                 res.send({status: 200, data: {message: "downvoted successfully"}})
+//             }
+//         }
+//         catch(err){
+//             res.send({status: 400, message: "error:"+err})
+//         }
+//     }
+//     else{
+//         res.send({status: 400, message: "error: complaint doesnt exist anymore"})
+//     }
+// }
+
 const upvote = async function(req, res){
-    const {complaintId} = req.body;
-    let complaint = getComplaintById(complaintId);
-    if(complaint){
-        try{
-            if(await isUpvoted({_id: req.sid, complaintId})){
-                await removeUpvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "removed upvote successfully"}})
-            }
-            else if(await isDownvoted({_id: req.sid, complaintId})){
-                await removeDownvote({_id: req.sid, complaintId});
-                await addUpvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "removed downvote and upvoted successfully"}})
-            }
-            else{
-                await addUpvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "upvoted successfully"}})
-            }
+    const { complaintId } = req.body;
+    const userId = req.sid; 
+
+    console.log(userId);
+    
+    try {
+        let complaint = await getComplaintById(complaintId); // Assuming this function returns a complaint document
+        if (!complaint) {
+            return res.status(404).send({ message: "Complaint doesn't exist anymore" });
         }
-        catch(err){
-            res.send({status: 400, message: "error:"+err})
+
+        const hasUpvoted = await isUpvoted({ _id: userId, complaintId });
+        const hasDownvoted = await isDownvoted({ _id: userId, complaintId });
+
+        if (hasUpvoted) {
+            return res.status(400).send({ message: "You have already upvoted this complaint" });
         }
+
+        if (hasDownvoted) {
+            await removeDownvote({ _id: userId, complaintId });
+        }
+        await addUpvote({ _id: userId, complaintId });
+
+        res.send({ status: 200, message: "Upvoted successfully" });
+    } catch (err) {
+        res.status(500).send({ message: "Error: " + err });
     }
-    else{
-        res.send({status: 400, message: "error: complaint doesnt exist anymore"})
-    }
-}
+};
 
 const downvote = async function(req, res){
-    const {complaintId} = req.body;
-    let complaint = getComplaintById(complaintId);
-    if(complaint){
-        try{
-            if(await isDownvoted({_id: req.sid, complaintId})){
-                await removeDownvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "removed downvote successfully"}})
-            }
-            else if(await isUpvoted({_id: req.sid, complaintId})){
-                await removeUpvote({_id: req.sid, complaintId});
-                await addDownvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "removed upvote and downvoted successfully"}})
-            }
-            else{
-                await addDownvote({_id: req.sid, complaintId});
-                res.send({status: 200, data: {message: "downvoted successfully"}})
-            }
+    const { complaintId } = req.body;
+    const userId = req.sid; // Assuming the user ID is in req.sid
+    
+    try {
+        let complaint = await getComplaintById(complaintId); // Assuming this function returns a complaint document
+        if (!complaint) {
+            return res.status(404).send({ message: "Complaint doesn't exist anymore" });
         }
-        catch(err){
-            res.send({status: 400, message: "error:"+err})
+
+        const hasDownvoted = await isDownvoted({ _id: userId, complaintId });
+        const hasUpvoted = await isUpvoted({ _id: userId, complaintId });
+
+        if (hasDownvoted) {
+            return res.status(400).send({ message: "You have already downvoted this complaint" });
         }
+
+        if (hasUpvoted) {
+            await removeUpvote({ _id: userId, complaintId });
+        }
+        await addDownvote({ _id: userId, complaintId });
+
+        res.send({ status: 200, message: "Downvoted successfully" });
+    } catch (err) {
+        res.status(500).send({ message: "Error: " + err });
     }
-    else{
-        res.send({status: 400, message: "error: complaint doesnt exist anymore"})
-    }
-}
+};
 
 
 module.exports = {upvote, downvote, studentDashboard, addComplaint, deleteComplaint, getComplaint, addComment, deleteComment, toggleLike}

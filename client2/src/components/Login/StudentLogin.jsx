@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirect_to_dashboard, logout } from '../../redux/studentSlice';
+import { redirect_to_dashboard, logoutStudent } from '../../redux/studentSlice';
 import { get_all_complaints, get_my_complaints } from '../../redux/complaintSlice';
 import Footer from '../Footer';
 
@@ -82,7 +82,7 @@ const StudentLogin = () => {
   const handleLogout = () => {
     axios.defaults.headers.common['Authorization'] = undefined;
     console.log("Logging out");
-    dispatch(logout());
+    dispatch(logoutStudent());
 
     localStorage.removeItem('token');
     console.log(localStorage.getItem('token'));

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { add_comment, delete_complaint } from "../redux/complaintSlice";
+import { add_comment, delete_complaint,update_vote_counts, } from "../redux/complaintSlice";
 import axios from "axios";
 import styled, { keyframes } from 'styled-components';
 import "../css/Complaintcard.css";
@@ -49,13 +49,13 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
     fetchStudentName();
   }, [complaint.studentId]);
 
-  const handleUpClick = () => {
-    setUpCount(upCount + 1);
-  };
+  // const handleUpClick = () => {
+  //   setUpCount(upCount + 1);
+  // };
 
-  const handleDownClick = () => {
-    setDownCount(downCount + 1);
-  };
+  // const handleDownClick = () => {
+  //   setDownCount(downCount + 1);
+  // };
 
   const openComment = () => {
     setShowCommentsOnCard((prev) => !prev);
@@ -105,6 +105,36 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
     closeCommentPopup();
   };
 
+  const handleUpClick = async () => {
+    try {
+      const res = await axios.post('http://localhost:5500/student/upvote', {
+        complaintId: complaint._id,
+        sid: complaint.studentId
+      });
+      if (res.data.status === 200) {
+        dispatch(update_vote_counts({ complaintId: complaint._id, upCount: res.data.data.upCount, downCount: res.data.data.downCount }));
+      }
+      console.log(res.data.message); 
+    } catch (error) {
+      console.error('Error upvoting:', error);
+    }
+  };
+  
+  const handleDownClick = async () => {
+    try {
+      const res = await axios.post('http://localhost:5500/student/downvote', {
+        complaintId: complaint._id,
+        sid: complaint.studentId
+      });
+      if (res.data.status === 200) {
+        dispatch(update_vote_counts({ complaintId: complaint._id, upCount: res.data.data.upCount, downCount: res.data.data.downCount }));
+      }
+      console.log(res.data.message); 
+    } catch (error) {
+      console.error('Error downvoting:', error);
+    }
+  };
+  
   const formattedDate = new Date(complaint.updatedAt).toLocaleDateString(
     "en-GB",
     {
