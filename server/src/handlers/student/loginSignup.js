@@ -1,16 +1,16 @@
 const jwt = require('jsonwebtoken')
-const {isValidStudentEmail, isValidStudentRegNo, isValidStudentRecoveryEmail, createStudent, isValidStudent} = require('../../database/operations/studentOp')
+const {isValidStudentEmail, isValidStudentRegNo, isValidStudentRecoveryEmail, createStudent, isValidStudent, isVerifiedStudentId} = require('../../database/operations/studentOp')
 
 const registerStudent = async (req,res)=>{
     const {name, regNo, email, password, hostelName, recoveryEmail, roomNo} = req.body
     if((await isValidStudentEmail(email)) || (await isValidStudentRecoveryEmail(recoveryEmail)) || (await isValidStudentRegNo(regNo))){
-        res.send({status: 200, message: "Unquie Fields contain existing values"})
+        res.send({status: 400, message: "Unquie Fields contain existing values"})
     }
     else{
         let data = {name, regNo, email, password, hostelName, recoveryEmail, roomNo}
         const obj= await createStudent(data)
         console.log(obj)
-        res.send(obj);
+        res.send({status: 200, data: obj});
     }
 }
 
@@ -21,6 +21,10 @@ const loginStudent = async (req,res)=>{
     let student = await isValidStudent({email, password});
     // console.log(student)
     if(student){
+        if(await isVerifiedStudentId(student._id)){
+            // verify
+            res.send({status: 301, data:{message: "verify your email"}});
+        }
         // console.log(process.env.SECRET_KEY)
         const token = jwt.sign({_id: student._id}, process.env.SECRET_KEY,{
             expiresIn: '7d'

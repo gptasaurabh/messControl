@@ -14,7 +14,7 @@ const config = {
     }
 }
 
-const verify = async function(req, res){
+const verifyy = async function(req, res){
     try{
         const transporter = nodemailer.createTransport(config);
         transporter.verify(function(error, success) {
@@ -75,7 +75,7 @@ const verifyLink = async function(req, res){
       <title>Verification</title>
     </head>
     <body>
-      <h1>You have been verified!</h1>
+      <h1>You have been verified! Try to log in again!!</h1>
     </body>
     </html>
   `;
@@ -90,7 +90,7 @@ const verifyLink = async function(req, res){
       <title>Verification</title>
     </head>
     <body>
-      <h1>Link expired!</h1>
+      <h1>Link expired!!!</h1>
     </body>
     </html>
   `;
@@ -105,7 +105,7 @@ const verifyLink = async function(req, res){
       <title>Verification</title>
     </head>
     <body>
-      <h1>Invalid link</h1>
+      <h1>Invalid link!!</h1>
     </body>
     </html>
   `;
@@ -113,4 +113,4 @@ const verifyLink = async function(req, res){
     }
 }
 
-module.exports = {verify, verifyLink}
+module.exports = {verifyy, verifyLink}

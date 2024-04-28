@@ -11,9 +11,10 @@ const { getStudentDetailById } = require('../handlers/studentQuery');
 const { wardenDashboard } = require('../handlers/warden/dashboard');
 const { loginWarden } = require('../handlers/warden/loginSignup');
 const { authW } = require('../auth/authWarden');
-const { verify, verifyLink } = require('../handlers/student/verification');
+const { verifyy, verifyLink } = require('../handlers/student/verification');
 const { upload } = require('../middleware/multerMiddleware');
 const { uploadFile } = require('../cloud/cloudnary');
+const { countUpvotes, countDownvotes } = require('../handlers/complaint');
 
 
 rootRoute.post('/registerStudent', registerStudent);
@@ -62,14 +63,18 @@ rootRoute.get('/warden/dashboard', authW, wardenDashboard)
 
 // rootRoute.post('/chiefWarden/getComplaints', authCW, getComplaintForHostel)
 
-rootRoute.get('/student/verify', authSL, verify);
+rootRoute.get('/student/verify', authSL, verifyy);
 
 rootRoute.get('/verifyLink', verifyLink);
 
 rootRoute.post('/fileUpload',upload.single('file'), uploadFile);
 
+rootRoute.get('/upvotes', countUpvotes);
+
+rootRoute.get('/downvotes', countDownvotes)
+
 rootRoute.get('/sudent/givenFeedback', authS);
 
-rootRoute.post('/student/giveFeedback', authS, addFeedback);
+// rootRoute.post('/student/giveFeedback', authS, addFeedback);
 
 module.exports = rootRoute
