@@ -12,6 +12,8 @@ const { wardenDashboard } = require('../handlers/warden/dashboard');
 const { loginWarden } = require('../handlers/warden/loginSignup');
 const { authW } = require('../auth/authWarden');
 const { verify, verifyLink } = require('../handlers/student/verification');
+const { upload } = require('../middleware/multerMiddleware');
+const { uploadFile } = require('../cloud/cloudnary');
 
 
 rootRoute.post('/registerStudent', registerStudent);
@@ -64,5 +66,6 @@ rootRoute.get('/student/verify', authSL, verify);
 
 rootRoute.get('/verifyLink', verifyLink);
 
+rootRoute.post('/fileUpload',upload.single('file'), uploadFile);
 
 module.exports = rootRoute

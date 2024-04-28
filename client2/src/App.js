@@ -10,6 +10,7 @@ import AdminLogin from './components/Login/AdminLogin';
 import Register from './components/Register';
 import Contributors from './components/Contributors';
 import Error from './components/Error';
+import Toast from './Toast';
 
 function App() {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ function App() {
           </>
         )}
       </Routes>
+      <Toast/>
     </>
   );
 }

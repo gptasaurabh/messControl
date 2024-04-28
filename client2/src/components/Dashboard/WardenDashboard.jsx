@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 // import Navbar from './Navbar';
 import defaultProfilePic from '../../images/user.png';
 // import Footer from './Footer';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import {useDispatch} from 'react-redux'
 import { add_complaint,get_all_complaints,get_my_complaints } from '../../redux/complaintSlice';
+import { menu_uploaded } from '../../redux/wardenSlice';
 import axios from 'axios';
 import Error from '../Error';
 import Complaintcard from '../Complaintcard';
+import { toast } from 'react-toastify';
 
 
 
 const WardenDashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [updateMenu, setUpdateMenu] = useState(false);
+  const [messMenuImageUrl, setMessMenuImageUrl] = useState('');
   const wardenData = useSelector((state) => state.wardens);
   const [showMyComplaints, setShowMyComplaints] = useState(true);
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
@@ -36,6 +39,8 @@ const WardenDashboard = () => {
   const [title,settitle] = useState('');
   const [description,setDescription] = useState('');
   const [proofImage,setProofImage] = useState();
+  const [file,setFile] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const studentName = wardenData.name;
 
 
@@ -63,6 +68,30 @@ const WardenDashboard = () => {
     
   }
 
+  const uploadImg = (e) => {
+    e.preventDefault();
+    if (!file) {
+      return;
+    }
+
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    axios.post('http://localhost:5500/fileUpload/', formData)
+      .then(res => {
+        dispatch(menu_uploaded(res.data));
+        setUpdateMenu(false);
+        toast.success('Menu updated successfully');
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
 
   const pageStyle = {
     display: 'flex',
@@ -81,14 +110,18 @@ const WardenDashboard = () => {
   };
 
   const profilePicStyle = {
-    width: '70px',
-    height: '70px',
+    width: '50px',
+    height: '50px',
     borderRadius: '50%',
     objectFit: 'cover',
   };
 
 
-  const openMenu = () => setShowMenu(true);
+  const openMenu = () => {
+    setShowMenu(true);
+    console.log(wardenData.menu);
+    setMessMenuImageUrl(wardenData.menu);
+  };
   const closeMenu = () => setShowMenu(false);
 
   const openUpdateMenu = () => setUpdateMenu(true);
@@ -152,13 +185,11 @@ const WardenDashboard = () => {
 
       <Modal show={showMenu} onHide={closeMenu}>
         <Modal.Header closeButton>
-          <Modal.Title className='text-center'>Mess Menu</Modal.Title>
+          <Modal.Title>Mess Menu</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Image uploaded for the mess menu will be displayed here </p>
+          {messMenuImageUrl ? <img src={messMenuImageUrl} alt="Mess Menu" style={{ width: '100%' }} /> : <p>No image available</p>}
         </Modal.Body>
-        <Modal.Footer>
-        </Modal.Footer>
       </Modal>
 
       <Modal show={updateMenu} onHide={closeUpdateMenu}>
@@ -166,10 +197,18 @@ const WardenDashboard = () => {
           <Modal.Title className='text-center'>Update Mess Menu</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <label htmlFor="">Upload image of new mess menu</label> <br /> <br />
-            <input type="file" accept="image/*" onChange={(e) => setProofImage(e.target.files[0])} />
+          <label>Upload image of new mess menu</label><br /><br />
+          <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} />
+          {isLoading && (
+            <div className="text-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
+          <Button disabled={isLoading} onClick={uploadImg}>Update</Button>
         </Modal.Footer>
       </Modal>
       
@@ -178,6 +217,3 @@ const WardenDashboard = () => {
 };
 
 export default WardenDashboard;
-
-
-
