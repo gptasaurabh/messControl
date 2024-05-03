@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {  useDispatch, useSelector } from 'react-redux';
 import { logoutStudent } from '../redux/studentSlice';
 import { logoutWarden } from '../redux/wardenSlice';
 import axios from 'axios';
+import { Button, Modal } from 'react-bootstrap';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import Typography from '@mui/material/Typography';
+
+const StyledRating = styled(Rating)({
+  '& .MuiRating-iconFilled': {
+    color: '#ff6d75',
+  },
+  '& .MuiRating-iconHover': {
+    color: '#ff3d47',
+  },
+});
 
 
 
@@ -13,6 +29,27 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [showModal, setShowModal] = useState(false);
+  const [morningRating, setMorningRating] = useState(2);
+  const [lunchRating, setLunchRating] = useState(2);
+  const [eveningRating, setEveningRating] = useState(2);
+  const [dinnerRating, setDinnerRating] = useState(2);
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
+  const handleComplaint = (e) => {
+    e.preventDefault();
+    //send data to server
+    console.log({
+      morningRating,
+      lunchRating,
+      eveningRating,
+      dinnerRating
+    });
+    closeModal();
+  }
 
   useSelector((state)=>{
     console.log(state);
@@ -65,9 +102,14 @@ const Navbar = () => {
           <div className="nav-links p-2 text-light">
             {((location.pathname === '/dashboard' && isAuthenticatedStudent) || (location.pathname==='/warden') && isAuthenticatedWarden) ? (
               // If on the dashboard, show Logout tab
+              <>
               <button className="text-light" style={logoutStyle} onClick={handleLogout}>
                 Logout
               </button>
+              <button className="text-light" style={logoutStyle} onClick={openModal}>
+              Feedback
+            </button>
+            </>
             ) : (
               // If not authenticated or not on the dashboard, show Home, Register, and Login tabs
               <>
@@ -136,6 +178,62 @@ const Navbar = () => {
         </nav>
       </div>
       <div style={{ paddingTop: '80px' }}>{/*  */}</div>
+
+      <Modal show={showModal} onHide={closeModal}>
+        <form onSubmit={handleComplaint}>
+          <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+            <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Give your feedback:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{backgroundColor:'#2d4e6b',color:'whitesmoke'}}>
+            <Typography component="legend">Morning Breakfast:</Typography>
+            <StyledRating
+              name="morning"
+              value={morningRating}
+              onChange={(event, newValue) => {
+                setMorningRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            /><br/>
+            <Typography component="legend">Lunch:</Typography>
+            <StyledRating
+              name="lunch"
+              value={lunchRating}
+              onChange={(event, newValue) => {
+                setLunchRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            /><br/>
+            <Typography component="legend">Evening Breakfast:</Typography>
+            <StyledRating
+              name="evening"
+              value={eveningRating}
+              onChange={(event, newValue) => {
+                setEveningRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            /><br/>
+            <Typography component="legend">Dinner:</Typography>
+            <StyledRating
+              name="dinner"
+              value={dinnerRating}
+              onChange={(event, newValue) => {
+                setDinnerRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            />
+          </Modal.Body>
+          <Modal.Footer style={{backgroundColor:'#285780'}}>
+            <Button variant="success" type="submit" style={{ borderRadius: '5px',backgroundColor:'#042645' }}>
+              Submit
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+
     </>
   );
 };

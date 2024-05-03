@@ -19,9 +19,10 @@ const CardContainer = styled.div`
   /* Adjust the duration as needed */
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: ${props => props.solved ? 'rgba(0, 128, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)'};
   }
 `;
+
 
 const Complaintcard = ({ complaint, showMyComplaints }) => {
   const [upCount, setUpCount] = useState(0);
@@ -31,6 +32,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
   const [comments, setComments] = useState([]);
   const [showCommentsOnCard, setShowCommentsOnCard] = useState(false); 
   const [studentName, setStudentName] = useState("");
+  const [solved,setSolved] = useState(false);
   const dispatch = useDispatch();
   const studentDetails_name = useSelector( state => state.students.name);
 
@@ -58,6 +60,10 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
   const openComment = () => {
     setShowCommentsOnCard((prev) => !prev);
   };
+
+  const handleSolved = () => {
+    setSolved(true);
+  }
 
   const handleDelete = () => {
     const confirmDelete = window.confirm(
@@ -188,6 +194,17 @@ const handleDownClick = async () => {
               <br />
               <i className="text-primary">[Reg No.: {complaint.studentRegNo}]</i>
             </p>
+            {!showMyComplaints && (
+              <Button
+                style={{backgroundColor: 'green', color: 'white'}}
+                size="sm"
+                onClick={handleSolved}
+                className="shadow-lg"
+                disabled={solved}
+              >
+                solved
+              </Button>
+            )}
             {showMyComplaints && (
               <Button
                 variant="danger"
