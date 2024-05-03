@@ -35,6 +35,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
   const [solved,setSolved] = useState(false);
   const dispatch = useDispatch();
   const studentDetails_name = useSelector( state => state.students.name);
+  const wardenData = useSelector( state => state.wardens.name);
 
   // console.log("complaint card",studentDetails_name);
 
@@ -194,7 +195,7 @@ const handleDownClick = async () => {
               <br />
               <i className="text-primary">[Reg No.: {complaint.studentRegNo}]</i>
             </p>
-            {!showMyComplaints && (
+            {wardenData && (
               <Button
                 style={{backgroundColor: 'green', color: 'white'}}
                 size="sm"

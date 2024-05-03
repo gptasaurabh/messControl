@@ -32,9 +32,9 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/" element={<Home />} />
         {/* <Route path="/" element={<Verify />} /> */}
-        <Route path="/" element={<Feedback />} />
+        {/* <Route path="/" element={<Feedback />} /> */}
         <Route path="*" element={<Error />} />
 
         {isAuthenticatedStudent && <Route path="/dashboard" element={<Dashboard />} />}

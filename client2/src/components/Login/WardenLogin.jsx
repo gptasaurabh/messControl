@@ -100,57 +100,53 @@ function WardenLogin() {
 
 
 const FormContainer = styled.div`
-  height: 100vh;
+  height: 110%;
   width: 100%;
   display: flex;
   flex-direction: column;
-//   justify-content: center;
   gap: 1rem;
   align-items: center;
   background-color: #001F3F;
-//   131324  #001F3F
-  overflow-x: hidden;
+  overflow: hidden;
   .brand {
     display: flex;
     align-items: center;
     gap: 1rem;
     justify-content: center;
-    img{
-      height: 5rem;
-    }
-    h3{
+    h3 {
       color: yellow;
       text-transform: uppercase;
     }
   }
-  form{
-    width:37%;
-    height:65%;
-    margin-top: 6rem;
+  form {
+    width: 45%;
+    height: 100%;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
     background-color: #00000076;
     border-radius: 2rem;
     padding: 2rem 7rem;
-    input{
+    padding-bottom: 5rem;
+    input,
+    select {
       background-color: transparent;
       padding: 1rem;
       border: 0.1rem solid skyblue;
       border-radius: 0.5rem;
       color: white;
       width: 100%;
-      font-size: 100%;
+      font-size: 90%;
       &:focus {
         border: 0.1rem solid blue;
         outline: none;
-      }      
-      
+      }
     }
     button {
       background-color: #997af0;
       color: white;
-      margin-top: 1rem;
       padding: 0.3rem;
       border: none;
       font-weight: bold;
@@ -165,14 +161,14 @@ const FormContainer = styled.div`
     }
     span {
       color: white;
-      font-size: 150%;
+      font-size: 100%;
       text-transform: uppercase;
-      a{
+      a {
         color: #4e0eff;
         text-decoration: none;
         font-weight: bold;
       }
-      word-spacing: 0.4rem;
+      word-spacing: 2px;
     }
   }
 `;

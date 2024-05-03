@@ -133,14 +133,14 @@ const StudentLogin = () => {
 };
 
 const FormContainer = styled.div`
-  height: 100vh;
+  height: 110%;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   align-items: center;
-  background-color: #001f3f;
-  overflow-x: hidden;
+  background-color: #001F3F;
+  overflow: hidden;
   .brand {
     display: flex;
     align-items: center;
@@ -152,23 +152,26 @@ const FormContainer = styled.div`
     }
   }
   form {
-    width: 37%;
-    height: 65%;
-    margin-top: 6rem;
+    width: 45%;
+    height: 100%;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
     background-color: #00000076;
     border-radius: 2rem;
     padding: 2rem 7rem;
-    input {
+    padding-bottom: 5rem;
+    input,
+    select {
       background-color: transparent;
       padding: 1rem;
       border: 0.1rem solid skyblue;
       border-radius: 0.5rem;
       color: white;
       width: 100%;
-      font-size: 100%;
+      font-size: 90%;
       &:focus {
         border: 0.1rem solid blue;
         outline: none;
@@ -177,7 +180,6 @@ const FormContainer = styled.div`
     button {
       background-color: #997af0;
       color: white;
-      margin-top: 1rem;
       padding: 0.3rem;
       border: none;
       font-weight: bold;
