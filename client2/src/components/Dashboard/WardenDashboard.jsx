@@ -11,6 +11,8 @@ import axios from 'axios';
 import Error from '../Error';
 import Complaintcard from '../Complaintcard';
 import { toast } from 'react-toastify';
+import { Typography } from '@mui/material';
+import { blueGrey } from '@mui/material/colors';
 
 
 
@@ -18,6 +20,7 @@ const WardenDashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [updateMenu, setUpdateMenu] = useState(false);
   const [messMenuImageUrl, setMessMenuImageUrl] = useState('');
+  const [showFeedback,setShowFeedback] = useState(false);
   const wardenData = useSelector((state) => state.wardens);
   const [showAllComplaints, setShowAllComplaints] = useState(true);
   // const myComplaints = useSelector((state) => state.complaints.myComplaints);
@@ -102,7 +105,8 @@ const WardenDashboard = () => {
     setMessMenuImageUrl(wardenData.menu);
   };
   const closeMenu = () => setShowMenu(false);
-
+  const openFeedback = () => setShowFeedback(true);
+  const closeFeedback = () => setShowFeedback(false);
   const openUpdateMenu = () => setUpdateMenu(true);
   const closeUpdateMenu = () => setUpdateMenu(false);
 
@@ -126,6 +130,7 @@ const WardenDashboard = () => {
             <div className="col-md-6 p-2 m-2">
                 <button className='btn btn-primary m-1' onClick={openMenu}>View Mess Menu</button>
                 <button className='btn btn-primary m-1' onClick={openUpdateMenu}>Update Mess Menu</button>
+                <button className='btn btn-primary m-1' onClick={openFeedback}>Feedbacks</button>
             </div>
         </div>
       </div>
@@ -182,6 +187,26 @@ const WardenDashboard = () => {
         </Modal.Footer>
       </Modal>
       
+      <Modal show={showFeedback} onHide={closeFeedback}>
+        <form>
+          <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+            <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Daily Ratings:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{backgroundColor:'#087bb3d4'}}>
+            <Typography component="legend" style={{color:'white'}}>Morning Breakfast:</Typography>
+            <Typography style={{color:'#7e0505'}}>3</Typography>
+            <br/>
+            <Typography component="legend" style={{color:'white'}}>Lunch:</Typography>
+            <Typography style={{color:'#7e0505'}}>3</Typography>
+            <br/>
+            <Typography component="legend" style={{color:'white'}}>Evening Breakfast:</Typography>
+            <Typography style={{color:'#7e0505'}}>3</Typography>
+            <br/>
+            <Typography component="legend" style={{color:'white'}}>Dinner:</Typography>
+            <Typography style={{color:'#7e0505'}}>3</Typography>
+          </Modal.Body>
+        </form>
+      </Modal>
     </div>
   );
 };
