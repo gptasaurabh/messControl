@@ -1,5 +1,5 @@
-const ComplaintSchema = require("../schema/schemaComplaint")
-
+const ComplaintSchema = require("../schema/schemaComplaint");
+const StudentSchema = require("../schema/schemaStudent");
 const getAllComplaints = async function(){
     return await ComplaintSchema.find({});
 }
