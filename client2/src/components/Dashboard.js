@@ -10,13 +10,35 @@ import Error from "./Error";
 import { redirect_to_dashboard } from "../redux/studentSlice";
 // import menu from "../images/menu.png"
 import Footer from "./Footer";
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import Typography from '@mui/material/Typography';
+
+
+const StyledRating = styled(Rating)({
+  '& .MuiRating-iconFilled': {
+    color: '#ff6d75',
+  },
+  '& .MuiRating-iconHover': {
+    color: '#ff3d47',
+  },
+});
+
 
 const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showFeedBack, setShowFeedback] = useState(false);
   const studentData = useSelector((state) => state.students);
   const wardenData = useSelector((state) => state.wardens);
   const [showMyComplaints, setShowMyComplaints] = useState(true);
+  const [morningRating, setMorningRating] = useState(2);
+  const [lunchRating, setLunchRating] = useState(2);
+  const [eveningRating, setEveningRating] = useState(2);
+  const [dinnerRating, setDinnerRating] = useState(2);
   const menu = wardenData.menu;
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
@@ -37,14 +59,44 @@ const Dashboard = () => {
   const openMenu = () => setShowMenu(true);
   const closeMenu = () => setShowMenu(false);
 
+  const openFeedback = () => setShowFeedback(true);
+  const closeFeedback = () => setShowFeedback(false);
 
+  //give feedback
+  const handleFeedback = (e) => {
+    e.preventDefault();
+    
+    const adjustedRatings = [
+        morningRating - 1,
+        lunchRating - 1,
+        eveningRating - 1,
+        dinnerRating - 1
+    ];
+
+    console.log("Adjusted Ratings:", adjustedRatings);
+
+    axios.post("http://localhost:5500/student/giveFeedback", {
+        ratings: adjustedRatings
+    })
+    .then((res) => {
+        console.log(res.data);
+        toast.success("Feedback successfully submitted!");
+    })
+    .catch((err) => {
+        console.error(err);
+        toast.error("Failed to submit feedback");
+    });
+    closeFeedback();
+};
+
+  
 
   useEffect(() => {
     fetchComplaintData();
-    const intervalId = setInterval(fetchComplaintData, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
+    // const intervalId = setInterval(fetchComplaintData, 1000);
+    // return () => {
+    //   clearInterval(intervalId);
+    // };
   }, []);
 
 
@@ -187,8 +239,8 @@ const Dashboard = () => {
         </div>
 
         <div className="container">
-          <div className="row justify-content-left">
-            <div className="col-md-6 p-2 m-2">
+          <div className="justify-content-left m-2">
+            {/* <div className="col-md-6 p-2 m-2"> */}
               <button
                 className="btn btn-primary m-1 shadow-lg"
                 onClick={() => setShowMyComplaints(false)}
@@ -214,7 +266,11 @@ const Dashboard = () => {
               >
                 Add Complaint
               </button>
-            </div>
+              <button className="btn btn-primary m-1 shadow-lg"
+                style={{ bottom: "180px", right: "20px" }} onClick={openFeedback}>
+               Add Feedback
+              </button>
+            {/* </div> */}
           </div>
         </div>
 
@@ -254,71 +310,116 @@ const Dashboard = () => {
         <div className="flex-grow-1"></div>
 
         
- <Modal show={showModal} onHide={closeModal}>
-  <form onSubmit={handleComplaint}>
-    <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
-      <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Add new complaint</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <label style={{ display: 'block', marginBottom: '10px' }}>Title:</label>
-      <input
-        type="text"
-        placeholder="Title"
-        style={{ width: '100%', padding: '8px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
-        required
-        onChange={(e) => settitle(e.target.value)}
-      />
+    <Modal show={showModal} onHide={closeModal}>
+      <form onSubmit={handleComplaint}>
+        <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+          <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Add new complaint</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <label style={{ display: 'block', marginBottom: '10px' }}>Title:</label>
+          <input
+            type="text"
+            placeholder="Title"
+            style={{ width: '100%', padding: '8px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
+            required
+            onChange={(e) => settitle(e.target.value)}
+          />
 
-      <label style={{ display: 'block', marginBottom: '10px' }}>Description:</label>
-      <textarea
-        type="text"
-        placeholder="Description"
-        style={{ width: '100%', padding: '8px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
-        required
-        onChange={(e) => setDescription(e.target.value)}
-      />
+          <label style={{ display: 'block', marginBottom: '10px' }}>Description:</label>
+          <textarea
+            type="text"
+            placeholder="Description"
+            style={{ width: '100%', padding: '8px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
+            required
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-      <label htmlFor="imageUpload" style={{ display: 'block', marginBottom: '10px' }}>Upload image if any:</label>
-      <input
-        type="file"
-        id="imageUpload"
-        accept="image/*"
-        style={{ marginBottom: '15px' }}
-        onChange={(e) => setProofImage(e.target.files[0])}
-      />
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="success" type="submit" onClick={closeModal} style={{ borderRadius: '5px' }}>
-        Submit
-      </Button>
-    </Modal.Footer>
-  </form>
-</Modal>
+          <label htmlFor="imageUpload" style={{ display: 'block', marginBottom: '10px' }}>Upload image if any:</label>
+          <input
+            type="file"
+            id="imageUpload"
+            accept="image/*"
+            style={{ marginBottom: '15px' }}
+            onChange={(e) => setProofImage(e.target.files[0])}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" type="submit" onClick={closeModal} style={{ borderRadius: '5px' }}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
 
-<Modal show={showMenu} onHide={closeMenu} size="lg" >
-  <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
-    <Modal.Title className="text-center" style={{ fontSize: '20px' }}>Mess Menu</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <p style={{ marginBottom: '15px', fontSize: '16px' }}>Mess Menu for {studentData.hostelName} Hostel</p>
-    <img src={menu} alt="Hostel Image" style={{ width: '100%', height: 'auto', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} />
-  </Modal.Body>
-  <Modal.Footer>
-    
-  </Modal.Footer>
-</Modal>
-<Footer/>
-
+    <Modal show={showMenu} onHide={closeMenu} size="lg" >
+      <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+        <Modal.Title className="text-center" style={{ fontSize: '20px' }}>Mess Menu</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p style={{ marginBottom: '15px', fontSize: '16px' }}>Mess Menu for {studentData.hostelName} Hostel</p>
+        <img src={menu} alt="Hostel Image" style={{ width: '100%', height: 'auto', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} />
+      </Modal.Body>
+      <Modal.Footer>
+        
+      </Modal.Footer>
+    </Modal>
+    <Footer/>
+    <Modal show={showFeedBack} onHide={closeFeedback}>
+        <form onSubmit={handleFeedback}>
+          <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+            <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Give your feedback:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{backgroundColor:'#2d4e6b',color:'whitesmoke'}}>
+            <Typography component="legend">Morning Breakfast:</Typography>
+            <StyledRating
+              name="morning"
+              value={morningRating}
+              onChange={(event, newValue) => {
+                setMorningRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            /><br/>
+            <Typography component="legend">Lunch:</Typography>
+            <StyledRating
+              name="lunch"
+              value={lunchRating}
+              onChange={(event, newValue) => {
+                setLunchRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            /><br/>
+            <Typography component="legend">Evening Breakfast:</Typography>
+            <StyledRating
+              name="evening"
+              value={eveningRating}
+              onChange={(event, newValue) => {
+                setEveningRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            /><br/>
+            <Typography component="legend">Dinner:</Typography>
+            <StyledRating
+              name="dinner"
+              value={dinnerRating}
+              onChange={(event, newValue) => {
+                setDinnerRating(newValue);
+              }}
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            />
+          </Modal.Body>
+          <Modal.Footer style={{backgroundColor:'#285780'}}>
+            <Button variant="success" type="submit" style={{ borderRadius: '5px',backgroundColor:'#042645' }}>
+              Submit
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
       </div>
     );
     return <Error/>
 };
-
 export default Dashboard;
-
-
-
-
-
-
-

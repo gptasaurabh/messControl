@@ -13,6 +13,7 @@ import Complaintcard from '../Complaintcard';
 import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
 import { blueGrey } from '@mui/material/colors';
+import Char from '../Char';
 
 
 
@@ -23,6 +24,8 @@ const WardenDashboard = () => {
   const [showFeedback,setShowFeedback] = useState(false);
   const wardenData = useSelector((state) => state.wardens);
   const [showAllComplaints, setShowAllComplaints] = useState(true);
+  const [fromDate, setFromDate] = useState(new Date().toISOString().split('T')[0]);
+  const [toDate, setToDate] = useState(new Date().toISOString().split('T')[0]);
   // const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
   // console.log("allcomplaints-",allComplaints.complaints);
@@ -73,7 +76,19 @@ const WardenDashboard = () => {
         setIsLoading(false);
       });
   };
+  
+  const [feedBacks,setFeedBacks]=useState([]);
+  const handleFetchFeedback = (e) => {
+    e.preventDefault();
 
+    axios.post('http://localhost:5500/getFeedback',
+      fromDate,
+      toDate
+    ).then( res =>{
+      setFeedBacks(res.data.data.feedbacks);
+      console.log("respond",feedBacks);
+    })
+  };
 
   const pageStyle = {
     display: 'flex',
@@ -188,25 +203,34 @@ const WardenDashboard = () => {
       </Modal>
       
       <Modal show={showFeedback} onHide={closeFeedback}>
-        <form>
+        <form onSubmit={handleFetchFeedback}>
           <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
             <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Daily Ratings:</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{backgroundColor:'#087bb3d4'}}>
-            <Typography component="legend" style={{color:'white'}}>Morning Breakfast:</Typography>
-            <Typography style={{color:'#7e0505'}}>3</Typography>
-            <br/>
-            <Typography component="legend" style={{color:'white'}}>Lunch:</Typography>
-            <Typography style={{color:'#7e0505'}}>3</Typography>
-            <br/>
-            <Typography component="legend" style={{color:'white'}}>Evening Breakfast:</Typography>
-            <Typography style={{color:'#7e0505'}}>3</Typography>
-            <br/>
-            <Typography component="legend" style={{color:'white'}}>Dinner:</Typography>
-            <Typography style={{color:'#7e0505'}}>3</Typography>
+            <div style={{display:'flex', justifyContent:'center',alignItems:'center',margin:'2px'}}>
+              <label>From: </label>
+              <input
+                type="date"
+                value={fromDate}
+                onChange={e => setFromDate(e.target.value)}
+                style={{ marginRight: 10 }}
+              />
+              <label>To: </label>
+              <input
+                type="date"
+                value={toDate}
+                onChange={e => setToDate(e.target.value)}
+              />
+            </div>
+            <div style={{display:'flex', justifyContent:'center',alignItems:'center',margin:'2px'}}>
+              <Button type="submit" className="mt-2">Show Ratings</Button>
+            </div>
+            <Char feedbacks={feedBacks} />
           </Modal.Body>
         </form>
       </Modal>
+
     </div>
   );
 };

@@ -74,11 +74,11 @@ rootRoute.get('/upvotes', countUpvotes);
 
 rootRoute.get('/downvotes', countDownvotes)
 
-rootRoute.get('/sudent/givenFeedback', authS, hasGivenFeedback);
+// rootRoute.get('/sudent/hasGivenFeedback', authS, hasGivenFeedback);
 
-rootRoute.get('/student/hasSubmittedFeedback',authS, getFeedback)
+rootRoute.post('/getFeedback', getFeedback)
 
-rootRoute.post('/student/giveFeedback', authS, addFeedback);
+// rootRoute.post('/student/giveFeedback', authS, addFeedback);
 
 // rootRoute.get('/feedback', authW);
 
