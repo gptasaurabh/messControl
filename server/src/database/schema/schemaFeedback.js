@@ -8,12 +8,14 @@ const feedbackSchema = new mongoose.Schema({
         // required: true
     },
     rating: {
-        type: Array,
-        of: mongoose.Types.ObjectId
+        type:[Number],
+        required:true,
+        // type: Array,
+        // of: mongoose.Types.ObjectId
     },
     date: {
         type: Date,
-        // required: true
+        required: true
     }
 })
 

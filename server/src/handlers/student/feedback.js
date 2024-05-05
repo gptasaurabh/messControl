@@ -8,12 +8,15 @@ const addFeedback = async (req,res) => {
 
 const getFeedback = async (req, res) =>{
     try{
-        let {start_date,end_date} = req.data;
+        console.log('hello')
+        let {start_date,end_date} = req.body;
+        console.log(req.body);
         let response = await getFeedbackByDate({start_date: start_date, end_date: end_date})
+        console.log("hello from backend",response);
         const rows = 4;
-        const cols = 4;
+        const cols = 5;
         const result = [];
-
+        console.log("hello");
         for (let i = 0; i < rows; i++) {
         result[i] = []; // Create an empty array for each row
         for (let j = 0; j < cols; j++) {
@@ -28,6 +31,7 @@ const getFeedback = async (req, res) =>{
                 });
             });
         }
+        console.log(result);
         res.send({status: 200, data: {feedbacks: result}});
     }
     catch(err){

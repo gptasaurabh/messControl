@@ -7,12 +7,14 @@ import Admindashboard from './component/Admindashboard';
 import Login from './component/Login';
 import Adminlogin from './component/Adminlogin';
 import { Route, Routes } from 'react-router-dom';
+import Char from './Char';
 
 function App() {
   return (
       <div className="App">
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Char />} />
           <Route path="/login" element={<Login />} />
           <Route path="/adminlogin" element={<Adminlogin/>} />
           <Route path="/userprofile" element={<Userprofile />} />
