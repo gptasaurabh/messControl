@@ -15,6 +15,7 @@ const { verifyy, verifyLink } = require('../handlers/student/verification');
 const { upload } = require('../middleware/multerMiddleware');
 const { uploadFile } = require('../cloud/cloudnary');
 const { countUpvotes, countDownvotes } = require('../handlers/complaint');
+const { hasGivenFeedback, getFeedback, addFeedback } = require('../handlers/student/feedback');
 
 
 rootRoute.post('/registerStudent', registerStudent);
@@ -73,8 +74,12 @@ rootRoute.get('/upvotes', countUpvotes);
 
 rootRoute.get('/downvotes', countDownvotes)
 
-rootRoute.get('/sudent/givenFeedback', authS);
+rootRoute.get('/sudent/givenFeedback', authS, hasGivenFeedback);
 
-// rootRoute.post('/student/giveFeedback', authS, addFeedback);
+rootRoute.get('/student/hasSubmittedFeedback',authS, getFeedback)
+
+rootRoute.post('/student/giveFeedback', authS, addFeedback);
+
+// rootRoute.get('/feedback', authW);
 
 module.exports = rootRoute
