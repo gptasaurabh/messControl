@@ -224,18 +224,7 @@ const Dashboard = () => {
       <div style={pageStyle}>
         <div className="container mt-3 shadow-lg" style={heading}>
           <div className="row">
-            <div className="col-md-6">
-              <span style={{ fontSize: "30px" }}>
-                Hostel Name : {studentData.hostelName}{" "}
-                <p style={{ fontSize: "20px" }}>
-                  Room No: {studentData.roomNo}
-                </p>
-                <p style={{ fontSize: "18px" }}>
-                  Amount left: <b style={{color:'Highlight'}}>00.00</b>
-                </p>
-              </span>
-            </div>
-            <div className="col-md-6" align="right">
+            <div className="col-md-6" align="left">
             {/* <div className="col-md-1 d-flex justify-content-center align-items-center"> */}
               <img
                 src={defaultProfilePic}
@@ -243,8 +232,19 @@ const Dashboard = () => {
                 style={profilePicStyle}
               />
             {/* </div> */}
-              <p>Name: {studentData.name}</p>
+              <p style={{marginTop:'2px',marginBottom:'2px'}}>Name: {studentData.name}</p>
               <p>Registration Number: {studentData.regNo}</p>
+            </div>
+            <div className="col-md-6" align="right">
+              <span style={{ fontSize: "25px" }}>
+                Hostel Name : {studentData.hostelName}{" "}
+                <p style={{ fontSize: "18px" }}>
+                  Room No: {studentData.roomNo}
+                </p>
+                <p style={{ fontSize: "18px" }}>
+                  Amount left: <b style={{color:'Highlight'}}>00.00</b>
+                </p>
+              </span>
             </div>
           </div>
         </div>
