@@ -203,6 +203,20 @@ const FormContainer = styled.div`
       }
       word-spacing: 2px;
     }
+    @media (max-width: 768px) {
+      width: 90%;   // Increase width for smaller screens
+      padding: 1rem; // Reduce padding
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+
+      input, select {
+        padding: 0.8rem; // Smaller padding for inputs
+      }
+
+      button {
+        font-size: 1.2rem; // Smaller button font size
+      }
+    }
   }
 `;
 

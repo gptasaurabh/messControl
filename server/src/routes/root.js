@@ -78,7 +78,7 @@ rootRoute.get('/downvotes', countDownvotes)
 
 rootRoute.post('/getFeedback', getFeedback)
 
-// rootRoute.post('/student/giveFeedback', authS, addFeedback);
+rootRoute.post('/student/giveFeedback', authS, addFeedback);
 
 // rootRoute.get('/feedback', authW);
 

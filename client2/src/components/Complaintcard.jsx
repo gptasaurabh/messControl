@@ -252,7 +252,7 @@ const handleDownClick = async () => {
       </CardContainer>
 
       <Modal show={showCommentPopup} onHide={closeCommentPopup}>
-        <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+        <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
           <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Add a comment</Modal.Title>
         </Modal.Header>
         <Modal.Body>

@@ -32,6 +32,7 @@ const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showFeedBack, setShowFeedback] = useState(false);
+  const [ShowPayment, setShowPayment] = useState(false);
   const studentData = useSelector((state) => state.students);
   const wardenData = useSelector((state) => state.wardens);
   const [showMyComplaints, setShowMyComplaints] = useState(true);
@@ -89,6 +90,9 @@ const Dashboard = () => {
     closeFeedback();
 };
 
+
+  const openPayment = () => setShowPayment(true);
+  const closePayment = () => setShowPayment(false);
   
 
   useEffect(() => {
@@ -165,6 +169,10 @@ const Dashboard = () => {
   };
 
 
+  const handlePayment = (e) =>{
+    e.preventDefault();
+    closePayment();
+  }
 
   const pageStyle = {
     display: "flex",
@@ -182,8 +190,8 @@ const Dashboard = () => {
   };
 
   const profilePicStyle = {
-    width: "70px",
-    height: "70px",
+    width: "50px",
+    height: "50px",
     borderRadius: "50%",
     objectFit: "cover",
   };
@@ -222,18 +230,21 @@ const Dashboard = () => {
                 <p style={{ fontSize: "20px" }}>
                   Room No: {studentData.roomNo}
                 </p>
+                <p style={{ fontSize: "18px" }}>
+                  Amount left: <b style={{color:'Highlight'}}>00.00</b>
+                </p>
               </span>
             </div>
-            <div className="col-md-5" align="right">
-              <p>Registration Number: {studentData.regNo}</p>
-              <p>Name: {studentData.name}</p>
-            </div>
-            <div className="col-md-1 d-flex justify-content-center align-items-center">
+            <div className="col-md-6" align="right">
+            {/* <div className="col-md-1 d-flex justify-content-center align-items-center"> */}
               <img
                 src={defaultProfilePic}
                 alt="Profile"
                 style={profilePicStyle}
               />
+            {/* </div> */}
+              <p>Name: {studentData.name}</p>
+              <p>Registration Number: {studentData.regNo}</p>
             </div>
           </div>
         </div>
@@ -269,6 +280,10 @@ const Dashboard = () => {
               <button className="btn btn-primary m-1 shadow-lg"
                 style={{ bottom: "180px", right: "20px" }} onClick={openFeedback}>
                Add Feedback
+              </button>
+              <button className="btn btn-primary m-1 shadow-lg"
+                style={{ bottom: "180px", right: "20px" }} onClick={openPayment}>
+               Make Payment
               </button>
             {/* </div> */}
           </div>
@@ -311,8 +326,8 @@ const Dashboard = () => {
 
         
     <Modal show={showModal} onHide={closeModal}>
-      <form onSubmit={handleComplaint}>
-        <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+      <form onSubmit={handleComplaint} style={{backgroundColor:'#0a487f',color:'white'}}>
+        <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
           <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Add new complaint</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -344,7 +359,7 @@ const Dashboard = () => {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" type="submit" onClick={closeModal} style={{ borderRadius: '5px' }}>
+          <Button variant="success" type="submit" onClick={closeModal} style={{ borderRadius: '5px',backgroundColor:'#042645' }}>
             Submit
           </Button>
         </Modal.Footer>
@@ -352,21 +367,18 @@ const Dashboard = () => {
     </Modal>
 
     <Modal show={showMenu} onHide={closeMenu} size="lg" >
-      <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+      <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
         <Modal.Title className="text-center" style={{ fontSize: '20px' }}>Mess Menu</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{backgroundColor:'#0a487f',color:'white'}}>
         <p style={{ marginBottom: '15px', fontSize: '16px' }}>Mess Menu for {studentData.hostelName} Hostel</p>
         <img src={menu} alt="Hostel Image" style={{ width: '100%', height: 'auto', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} />
       </Modal.Body>
-      <Modal.Footer>
-        
-      </Modal.Footer>
     </Modal>
     <Footer/>
     <Modal show={showFeedBack} onHide={closeFeedback}>
         <form onSubmit={handleFeedback}>
-          <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+          <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
             <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Give your feedback:</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{backgroundColor:'#2d4e6b',color:'whitesmoke'}}>
@@ -418,6 +430,29 @@ const Dashboard = () => {
           </Modal.Footer>
         </form>
       </Modal>
+
+      <Modal show={ShowPayment} onHide={closePayment}>
+      <form onSubmit={handlePayment} style={{backgroundColor:'#0a487f',color:'white'}}>
+        <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
+          <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Add new complaint</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <label style={{ display: 'block', marginBottom: '10px' }}>Amount:</label>
+          <input
+            type="number"
+            placeholder="Amount"
+            style={{ width: '100%', padding: '8px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
+            required
+            onChange={(e) => settitle(e.target.value)}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" type="submit" style={{ borderRadius: '5px',backgroundColor:'#042645' }}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
       </div>
     );
     return <Error/>

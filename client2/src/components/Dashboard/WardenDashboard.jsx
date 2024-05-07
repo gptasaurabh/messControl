@@ -19,6 +19,7 @@ import Char from '../Char';
 
 const WardenDashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [showBill, setShowBill] = useState(false);
   const [updateMenu, setUpdateMenu] = useState(false);
   const [messMenuImageUrl, setMessMenuImageUrl] = useState('');
   const [showFeedback,setShowFeedback] = useState(false);
@@ -26,6 +27,7 @@ const WardenDashboard = () => {
   const [showAllComplaints, setShowAllComplaints] = useState(true);
   const [fromDate, setFromDate] = useState(new Date().toISOString().split('T')[0]);
   const [toDate, setToDate] = useState(new Date().toISOString().split('T')[0]);
+
   // const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
   // console.log("allcomplaints-",allComplaints.complaints);
@@ -124,6 +126,40 @@ const WardenDashboard = () => {
   const closeFeedback = () => setShowFeedback(false);
   const openUpdateMenu = () => setUpdateMenu(true);
   const closeUpdateMenu = () => setUpdateMenu(false);
+  const openBill = () => setShowBill(true);
+  const closeBill = () => setShowBill(false);
+  const [billAmount, setBillAmount] = useState("");
+  const [billFile, setBillFile] = useState(null);
+
+  // Function to handle bill upload
+  const uploadBill = (e) => {
+    e.preventDefault();
+    if (!billFile || !billAmount) {
+      toast.error("Please enter all bill details.");
+      return;
+    }
+
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('billAmount', billAmount);
+    formData.append('billFile', billFile);
+
+    // axios.post('http://localhost:5500/uploadBill', formData)
+    //   .then(res => {
+    //     toast.success('Bill added successfully');
+    //     setBillAmount("");
+    //     setBillFile(null);
+    //     setShowBill(false);  // Close modal on success
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //     toast.error('Error uploading bill');
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //   });
+  };
+  
 
   return (
     <div style={pageStyle}>
@@ -146,6 +182,7 @@ const WardenDashboard = () => {
                 <button className='btn btn-primary m-1' onClick={openMenu}>View Mess Menu</button>
                 <button className='btn btn-primary m-1' onClick={openUpdateMenu}>Update Mess Menu</button>
                 <button className='btn btn-primary m-1' onClick={openFeedback}>Feedbacks</button>
+                <button className='btn btn-primary m-1' onClick={openBill}>Bill Add</button>
             </div>
         </div>
       </div>
@@ -174,19 +211,19 @@ const WardenDashboard = () => {
       <div className="flex-grow-1"></div>
 
       <Modal show={showMenu} onHide={closeMenu}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
           <Modal.Title>Mess Menu</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{backgroundColor:'#0a487f',color:'white'}}>
           {messMenuImageUrl ? <img src={messMenuImageUrl} alt="Mess Menu" style={{ width: '100%' }} /> : <p>No image available</p>}
         </Modal.Body>
       </Modal>
 
       <Modal show={updateMenu} onHide={closeUpdateMenu}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
           <Modal.Title className='text-center'>Update Mess Menu</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{backgroundColor:'#0a487f',color:'white'}}>
           <label>Upload image of new mess menu</label><br /><br />
           <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} />
           {isLoading && (
@@ -197,14 +234,14 @@ const WardenDashboard = () => {
             </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{backgroundColor:'#0a487f',color:'white'}}>
           <Button disabled={isLoading} onClick={uploadImg}>Update</Button>
         </Modal.Footer>
       </Modal>
       
       <Modal show={showFeedback} onHide={closeFeedback}>
         <form onSubmit={handleFetchFeedback}>
-          <Modal.Header closeButton style={{ backgroundColor: '#3498db', color: 'white' }}>
+          <Modal.Header closeButton style={{ backgroundColor: 'rgb(10, 91, 145)', color: 'white' }}>
             <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Daily Ratings:</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{backgroundColor:'#087bb3d4'}}>
@@ -230,7 +267,36 @@ const WardenDashboard = () => {
           </Modal.Body>
         </form>
       </Modal>
-
+      
+      <Modal show={showBill} onHide={closeBill}>
+      <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
+        <Modal.Title className='text-center'>Add Bill</Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{backgroundColor:'#0a487f',color:'white'}}>
+        <form onSubmit={uploadBill}>
+          <label>Bill Amount</label><br />
+          <input
+            type="number"
+            value={billAmount}
+            onChange={e => setBillAmount(e.target.value)}
+            placeholder="Enter amount"
+            style={{ width: '100%', marginBottom: '10px' }}
+          />
+          <label>Upload Bill Image</label><br />
+          <input type="file" accept="image/*" onChange={e => setBillFile(e.target.files[0])} style={{marginBottom:'5px'}}/>
+          {isLoading && (
+            <div className="text-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          )}
+          <Modal.Footer style={{backgroundColor:'#0a487f',color:'white'}}>
+            <Button type="submit" disabled={isLoading}>Add Bill</Button>
+          </Modal.Footer>
+        </form>
+      </Modal.Body>
+    </Modal>
     </div>
   );
 };
