@@ -59,8 +59,8 @@ const Navbar = () => {
         <nav style={navbarStyle} className="text-light">
           <div className="logo">
             <h2>
-              <span>MESS</span>
-              <span style={{ backgroundColor: 'skyblue', color: 'black', borderRadius: '8px', marginLeft: '4px' }}>BLITZ</span>
+              <span>EAT</span>
+              <span style={{ backgroundColor: 'skyblue', color: 'black', borderRadius: '8px', marginLeft: '4px' }}>SPEAK</span>
             </h2>
           </div>
           <div className="nav-links p-2 text-light">
