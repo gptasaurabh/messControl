@@ -11,7 +11,9 @@
 
 // module.exports = {getAllHostels}
 
+const { getHostelExpense } = require("../database/operations/hostelOp");
 const HostelSchema = require("../database/schema/schemaHostel");
+const { getStudentDetailById } = require("./studentQuery");
 
 const getAllHostels = async (req, res) => {
     try {
@@ -32,4 +34,9 @@ const getAllHostels = async (req, res) => {
     }
 }
 
-module.exports = { getAllHostels };
+const getHostelExpensePerPerson = async function(req, res){
+    let student = await getStudentDetailById(req.sid);
+    let hostelExpense = await getHostelExpense(student.hostelName);
+}
+
+module.exports = { getAllHostels , getHostelExpensePerPerson};

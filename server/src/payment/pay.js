@@ -62,9 +62,8 @@ const paymentVerification = async (req, res) => {
         razorpay_payment_id,
         razorpay_signature,
       });
-      res.redirect(
-        `http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`
-      );
+      console.log(req.sid);
+      res.send({status: 200, data:{payment_id: razorpay_payment_id, message: "Payment is success"}});
     } else {
       res.status(401).json({ message: "Not Authenticated" });
     }

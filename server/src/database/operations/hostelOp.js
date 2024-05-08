@@ -42,4 +42,12 @@ const increaseExpense = async function(data){
     }
 }
 
-module.exports = {increaseStudent ,isValidHostelName, createHostel, getAllHostels}
+const getHostelExpense = async function(hostelName){
+    let hostel = await HostelSchema.find({hostelName: hostelName});
+    if(hostel){
+        return (hostel.expensse/hostel.noOfStudents);
+    }
+    return 0;
+}
+
+module.exports = {getHostelExpense, increaseExpense, increaseStudent ,isValidHostelName, createHostel, getAllHostels}

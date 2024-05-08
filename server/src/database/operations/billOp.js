@@ -1,4 +1,6 @@
 const BillSchema = require("../schema/schemaBill");
+const { increaseExpense } = require("./hostelOp");
+const { getWardenById } = require("./wardenOp");
 
 const getDateCorrected = async function(date){
     let date1 = date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString();
@@ -14,7 +16,7 @@ const getBills = async function(data){
 const addBills = async function(data){
     let image_url = data.url;
     let amount = data.amount;
-    let date = await getDateCorrected(date1);
+    let date = await getDateCorrected(new Date());
     const bill = new BillSchema({
         image_url: image_url,
         amount: amount,
@@ -26,6 +28,10 @@ const addBills = async function(data){
     }).catch((err)=>{
         response =  {status: 400, message:"error: "+err};
     })
+    if(response.status===200){
+        let warden = await getWardenById(req.wid);
+        await increaseExpense({name:warden.hostelName,expense:amount});
+    }
     return response;
 }
 

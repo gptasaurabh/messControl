@@ -2,7 +2,7 @@ const express = require('express')
 const rootRoute = express.Router()
 const {loginStudent, logout, registerStudent} = require('../handlers/student/loginSignup');
 const { registerWarden, registerHostel, chiefWardeDashboard, getUnassignedWardens, getComplaintForHostel } = require('../handlers/chiefWarden/dashboard');
-const { getAllHostels } = require('../handlers/hostelQuery');
+const { getAllHostels, getHostelExpensePerPerson } = require('../handlers/hostelQuery');
 const { studentDashboard, addComplaint, deleteComplaint, addComment, deleteComment, toggleLike, upvote, downvote } = require('../handlers/student/dashboard');
 const { authCW } = require('../auth/authChiefWarden');
 const { loginChiefWarden, registerChiefWarden } = require('../handlers/chiefWarden/loginSignup');
@@ -19,6 +19,7 @@ const { hasGivenFeedback, getFeedback, addFeedback } = require('../handlers/stud
 const { uploadBill, getBillsbyDate } = require('../handlers/warden/billUpload');
 
 const {checkout,paymentVerification,getkey} = require('../payment/pay');
+const { getHostelExpense } = require('../database/operations/hostelOp');
 
 
 rootRoute.post('/registerStudent', registerStudent);
@@ -85,13 +86,15 @@ rootRoute.post('/student/giveFeedback', authS, addFeedback);
 
 rootRoute.get("/getkey",getkey);
 
-rootRoute.post("/checkout",checkout);
+rootRoute.post("/checkout",authS, checkout);
 
-rootRoute.post("/paymentverification",paymentVerification);
+rootRoute.post("/paymentverification", authS, paymentVerification);
 
-rootRoute.post('/warden/uploadBill', uploadBill);
+rootRoute.post('/warden/uploadBill', authW, uploadBill);
 
 rootRoute.post('/student/getBills', authS, getBillsbyDate);
+
+rootRoute.get('/student/hostelExpensePerPerson', authS, getHostelExpensePerPerson);
 
 // rootRoute.get('/feedback', authW);
 

@@ -70,4 +70,5 @@ const addHostelToWarden = async function(data){
     await warden.save();
 }
 
+
 module.exports = {getAllUnassginedWarden, addHostelToWarden, isValidWardenId, isValidWarden, createWarden, isValidWardenEmail, isValidWardenRecoveryEmail, getWardenById, getWardenByEmail, isValidWarden}

@@ -42,7 +42,9 @@ const createStudent = async function(data){
         recoveryEmail: data.recoveryEmail,
         hostelName: data.hostelName,
         roomNo: data.roomNo,
-        verified: false
+        verified: false,
+        feePaid: false,
+        feeAmount: 0
     })
     let response;
     await student.save().then(()=>{
@@ -104,7 +106,9 @@ const getStudentbyId = async function(_id){
             regNo: student.regNo,
             hostelName: student.hostelName,
             profileImg: student.profileImg,
-            roomNo: student.roomNo
+            roomNo: student.roomNo,
+            feePaid: student.feePaid,
+            feeAmount: student.feeAmount
         };
     }
     else{

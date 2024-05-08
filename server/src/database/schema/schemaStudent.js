@@ -40,6 +40,10 @@ const studentSchema = new mongoose.Schema({
     feePaid: {
         type: Boolean,
         required: false
+    },
+    feeAmount: {
+        type: Number,
+        required: false
     }
 }, {timestamps: true})
 
