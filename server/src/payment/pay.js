@@ -1,41 +1,79 @@
-const checkout = async (req, res) => {
-    const options = {
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
+const dotenv = require('dotenv')
+dotenv.config({path: '.\\..\\config.env'})
+const Payment = require('../database/schema/paymentSchema.js');
 
-      amount: Number(req.body.amount * 100),
+const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_API_SECRET,
+});
+
+// console.log("Razorpay Key:", process.env.RAZORPAY_API_KEY);
+// console.log("Razorpay Secret:", process.env.RAZORPAY_API_SECRET);
+const getkey = (req, res) =>{
+  console.log(req.body);
+  console.log(process.env.RAZORPAY_API_KEY);
+  res.status(200).json({ key: process.env.RAZORPAY_API_KEY })
+}
+
+const checkout = async (req, res) => {
+  console.log(req.body);
+  try {
+    const options = {
+      amount: Number(req.body.amount * 100), // convert to paise
       currency: "INR",
     };
     const order = await instance.orders.create(options);
-  
     res.status(200).json({
       success: true,
       order,
     });
+  } catch (error) {
+    console.error('Error in creating order:', error);
+    res.status(500).json({success: false, message: "Internal Server Error"});
+  }
 };
-  
-const paymentVerification = async (req, res) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-      req.body;
-  
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
-  
-    const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_APT_SECRET)
-      .update(body.toString())
-      .digest("hex");
-  
-    const isAuthentic = expectedSignature === razorpay_signature;
-  
-    if (isAuthentic) {
 
+
+
+const paymentVerification = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature,razorpay_amount } = req.body;
+    
+    const order = await instance.orders.fetch(razorpay_order_id);
+    // console.log(order);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    var generatedSignature = crypto
+      .createHmac("SHA256", process.env.RAZORPAY_API_SECRET)
+      .update(razorpay_order_id + "|" + razorpay_payment_id)
+      .digest("hex"); 
+
+    const isAuthentic = generatedSignature === razorpay_signature;
+
+    if (isAuthentic) {
       await Payment.create({
+        amount: order.amount,
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
       });
-      res.send({status: 200, data: {message: "Payment Successful"}})
+      res.redirect(
+        `http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`
+      );
     } else {
-      res.send({status: 400, data: {message: "Not Authenticated"}});
+      res.status(401).json({ message: "Not Authenticated" });
     }
+  } catch (error) {
+    console.error('Error in payment verification:', error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
-module.exports = {checkout, paymentVerification}
+
+
+module.exports = { instance, checkout, paymentVerification,getkey };

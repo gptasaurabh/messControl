@@ -13,6 +13,7 @@ import Error from './components/Error';
 import Toast from './Toast';
 import Verify from './verification/Verify';
 import Feedback from './feedback/Feedback';
+import Paymentsuccess from './components/Paymentsuccess';
 
 function App() {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ function App() {
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/contributors" element={<Contributors />} />
+            <Route path="/paymentsuccess" element={<Paymentsuccess />} />
           </>
         )}
       </Routes>
