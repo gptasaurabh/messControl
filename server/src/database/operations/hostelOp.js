@@ -31,21 +31,28 @@ const getAllHostels = async function(){
 const increaseStudent = async function(name){
     let hostel = await HostelSchema.find({hostelName: name});
     if(hostel){
-        await HostelSchema.findOneAndUpdate({hostelName: name},{noOfStudents: (hostel.noOfStudents+1)});
+        if(hostel.noOfStudents)
+            await HostelSchema.findOneAndUpdate({hostelName: name},{noOfStudents: (hostel.noOfStudents+1)});
+        else
+            await HostelSchema.findOneAndUpdate({hostelName: name},{noOfStudents: 1});
     }
 }
 
 const increaseExpense = async function(data){ 
+    console.log(data);
     let hostel = await HostelSchema.find({hostelName: data.name});
     if(hostel){
-        await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: hostel.expense+data.expense});
+        if(hostel.expense)
+            await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: hostel.expense+data.expense});
+        else
+            await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: data.expense});
     }
 }
 
 const getHostelExpense = async function(hostelName){
-    let hostel = await HostelSchema.find({hostelName: hostelName});
+    let hostel = await HostelSchema.findOne({hostelName: hostelName});
     if(hostel){
-        return (hostel.expensse/hostel.noOfStudents);
+        return (hostel.expense/hostel.noOfStudents);
     }
     return 0;
 }

@@ -1,15 +1,14 @@
 const BillSchema = require("../schema/schemaBill");
-const { increaseExpense } = require("./hostelOp");
-const { getWardenById } = require("./wardenOp");
 
-const getDateCorrected = async function(date){
-    let date1 = date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString();
-    let correctDate = new Date(date);
+const getDateCorrected = async function(date2){
+    let date = new Date(date2)
+    let date1 = date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString();
+    let correctDate = new Date(date1);
     return correctDate;
 }
 
 const getBills = async function(data){
-    let date = getDateCorrected(data.date);
+    let date = await getDateCorrected(data.date);
     return await BillSchema.find({date: date});
 }
 
@@ -28,10 +27,6 @@ const addBills = async function(data){
     }).catch((err)=>{
         response =  {status: 400, message:"error: "+err};
     })
-    if(response.status===200){
-        let warden = await getWardenById(req.wid);
-        await increaseExpense({name:warden.hostelName,expense:amount});
-    }
     return response;
 }
 

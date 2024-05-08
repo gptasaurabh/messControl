@@ -33,6 +33,7 @@ const Dashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showFeedBack, setShowFeedback] = useState(false);
   const [ShowPayment, setShowPayment] = useState(false);
+  const [ShowBill, setShowBill] = useState(false);
   const studentData = useSelector((state) => state.students);
   const wardenData = useSelector((state) => state.wardens);
   const [showMyComplaints, setShowMyComplaints] = useState(true);
@@ -55,7 +56,8 @@ const Dashboard = () => {
   const [proofImage, setProofImage] = useState();
   const studentName = studentData.name;
   const studentEmail = studentData.email;
-  const studentReg = studentData.regNo;
+  const studentAmount = studentData.Amount;
+  console.log("dashboard-",studentAmount);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -79,7 +81,7 @@ const Dashboard = () => {
 
     console.log("Adjusted Ratings:", adjustedRatings);
 
-    axios.post("http://localhost:5500/student/giveFeedback", {
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/giveFeedback`, {
         ratings: adjustedRatings
     })
     .then((res) => {
@@ -96,14 +98,34 @@ const Dashboard = () => {
 
   const openPayment = () => setShowPayment(true);
   const closePayment = () => setShowPayment(false);
+
+  const [bills,setBills] = useState([]);
+  const [date,setDate] = useState("");
+  const openBill = () => setShowBill(true);
+  const closeBill = () => setShowBill(false);
+
+  const handleBills = (e) =>{
+    e.preventDefault();
+    console.log(date)
+    console.log(typeof date)
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/getBills`,
+      {date: date},
+    ).then(res => {
+      setBills(res.data.data);
+      console.log("Response:", res.data.data);
+  })
+  .catch(err => {
+      console.error("Error fetching bills:", err);
+  });
+  }
   
 
   useEffect(() => {
     fetchComplaintData();
-    // const intervalId = setInterval(fetchComplaintData, 1000);
-    // return () => {
-    //   clearInterval(intervalId);
-    // };
+    const intervalId = setInterval(fetchComplaintData, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
 
@@ -112,7 +134,7 @@ const Dashboard = () => {
     axios.defaults.headers.common['Authorization'] = authToken;
 
     axios
-      .get("http://localhost:5500/student/dashboard")
+      .get(`${process.env.REACT_APP_BACK_END_URL}/student/dashboard`)
       .then((response) => {
         // console.log(response);
         
@@ -155,7 +177,7 @@ const Dashboard = () => {
   const handleComplaint = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5500/student/addComplaint", {
+      .post(`${process.env.REACT_APP_BACK_END_URL}/student/addComplaint`, {
         title,
         description,
         proofImage,
@@ -174,12 +196,13 @@ const Dashboard = () => {
 
   const handlePayment = async (e) => {
     e.preventDefault();
-    const { data: { key } } = await axios.get("http://www.localhost:5500/getkey");
+    const { data: { key } } = await axios.get(`${process.env.REACT_APP_BACK_END_URL}/getkey`);
     console.log("amount",amount);
-    const { data: { order } } = await axios.post("http://localhost:5500/checkout", {
+    const { data: { order } } = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/checkout`, {
         amount
     })
 
+    console.log(order);
     const options = {
         key:key,
         amount: order.amount,
@@ -187,7 +210,27 @@ const Dashboard = () => {
         name: "Mess Payment",
         description: "Mess Fees Payment",
         order_id: order.id,
-        callback_url: "http://localhost:5500/paymentverification",
+        // callback_url: "http://localhost:5500/paymentverification",
+        handler: async function(response) {
+          
+          const body = {...response,}
+
+          const validateResponse = await fetch(`${process.env.REACT_APP_BACK_END_URL}/paymentverification`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'authorization': localStorage.getItem('token')
+          },
+          body: JSON.stringify(body)
+          })
+
+          const jsonResponse = await validateResponse.json();
+
+          console.log('jsonResponse', jsonResponse);
+          if(jsonResponse.status===200){
+            toast.success("Payment successfull");
+          }
+        },
         prefill: {
             name: {studentName},
             email: {studentEmail},
@@ -272,7 +315,7 @@ const Dashboard = () => {
                   Room No: {studentData.roomNo}
                 </p>
                 <p style={{ fontSize: "18px" }}>
-                  Amount left: <b style={{color:'Highlight'}}>00.00</b>
+                  Amount left: <b style={{color:'Highlight'}}>{studentAmount}</b>
                 </p>
               </span>
             </div>
@@ -314,6 +357,10 @@ const Dashboard = () => {
               <button className="btn btn-primary m-1 shadow-lg"
                 style={{ bottom: "180px", right: "20px" }} onClick={openPayment}>
                Make Payment
+              </button>
+              <button className="btn btn-primary m-1 shadow-lg"
+                style={{ bottom: "180px", right: "20px" }} onClick={openBill}>
+               See Bill 
               </button>
             {/* </div> */}
           </div>
@@ -464,7 +511,7 @@ const Dashboard = () => {
       <Modal show={ShowPayment} onHide={closePayment}>
       <form onSubmit={handlePayment} style={{backgroundColor:'#0a487f',color:'white'}}>
         <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
-          <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Add new complaint</Modal.Title>
+          <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>Make Payment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <label style={{ display: 'block', marginBottom: '10px' }}>Amount:</label>
@@ -482,6 +529,41 @@ const Dashboard = () => {
           </Button>
         </Modal.Footer>
       </form>
+    </Modal>
+
+    <Modal show={ShowBill} onHide={closeBill}>
+    <form onSubmit={handleBills}>
+          <Modal.Header closeButton style={{ backgroundColor: 'rgb(10, 91, 145)', color: 'white' }}>
+            <Modal.Title style={{ textAlign: 'center', fontSize: '20px' }}>See Bills:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{backgroundColor:'#087bb3d4'}}>
+            <div style={{display:'flex', justifyContent:'center',alignItems:'center',margin:'2px'}}>
+              <label>Date: </label>
+              <input
+                type="date"
+                value={date}
+                onChange={e => setDate(e.target.value)}
+                style={{ marginRight: 10 }}
+              />
+            </div>
+            <div style={{display:'flex', justifyContent:'center',alignItems:'center',margin:'2px'}}>
+              <Button type="submit" className="mt-2">Show Bills</Button>
+            </div>
+            <div style={{ margin: '10px 0' }}>
+            {bills.length > 0 ? (
+                bills.map((bill, index) => (
+                  <div key={index} style={{ padding: '10px', backgroundColor: '#fff', marginBottom: '5px', borderRadius: '5px' }}>
+                    <p><strong>Amount:</strong> ${bill.amount}</p>
+                    <p><strong>Date:</strong> {new Date(bill.date).toLocaleDateString()}</p>
+                    <p><strong>Receipt:</strong> <a href={bill.image_url} target="_blank" rel="noopener noreferrer">View Image</a></p>
+                  </div>
+                ))
+              ) : (
+                <p style={{ textAlign: 'center', padding: '20px' }}>No bills found for the selected date.</p>
+              )}
+            </div>
+          </Modal.Body>
+        </form>
     </Modal>
       </div>
     );

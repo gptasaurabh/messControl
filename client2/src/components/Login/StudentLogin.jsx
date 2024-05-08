@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirect_to_dashboard, logoutStudent } from '../../redux/studentSlice';
+import { redirect_to_dashboard, logoutStudent ,change_fee} from '../../redux/studentSlice';
 import { get_all_complaints, get_my_complaints } from '../../redux/complaintSlice';
 import Footer from '../Footer';
 
@@ -23,7 +23,8 @@ const StudentLogin = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:5500/loginStudent', {
+    console.log("kdjjkf=",process.env.BACK_END_URL)
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/loginStudent`, {
       email,
       password,
     })
@@ -31,7 +32,7 @@ const StudentLogin = () => {
         console.log(res.data.status);
         if(res.data.status===301){
           console.log("hi")
-          axios.post('http://localhost:5500/student/verify',{
+          axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/verify`,{
             email
           }).then((res)=>{
             toast.error('Check your email to verify your account');
@@ -47,15 +48,17 @@ const StudentLogin = () => {
 
 
         // Fetch student data after successful login
-        axios.get('http://localhost:5500/student/dashboard')
+        axios.get(`${process.env.REACT_APP_BACK_END_URL}/student/dashboard`)
           .then((response) => {
             // console.log(response.data.data.complaints);
             // console.log(response.data.data.myComplaints);
             if(response.data.status===200){
               const studentData = response.data.data;
+              console.log("dkowo====",studentData);
               dispatch(redirect_to_dashboard({
                 name : studentData.name,
                 email: studentData.email,
+                feeAmount: studentData.feeAmount,
                 regNo: studentData.regNo,
                 hostelName: studentData.hostelName,
                 roomNo: studentData.roomNo,
@@ -67,7 +70,34 @@ const StudentLogin = () => {
               dispatch(get_my_complaints({
                 myComplaints : studentData.myComplaints
               }))
-              navigate('/dashboard')
+              
+              
+              axios.get(`${process.env.REACT_APP_BACK_END_URL}/student/hostelExpensePerPerson`)
+                .then((response) => {
+                  console.log("Data received:", response.data);
+                  const receivedAmount = response.data.data.expense;
+                  const numericAmount = Number(receivedAmount);
+                  console.log("Received amount (raw):", receivedAmount);
+                  console.log("Received amount (converted to number):", numericAmount);
+              
+                  if (!isNaN(numericAmount)) {
+                    const Amount = 25000 - numericAmount;
+                    console.log("Calculated feeAmount:", Amount);
+                    dispatch(change_fee({
+                      Amount: Amount,
+                    }));
+                    navigate('/dashboard');
+                  } else {
+                    console.error("Received data is not convertible to number.");
+                  }
+                })
+                .catch((error) => {
+                  console.error('Error fetching bill data:', error);
+                  // toast.error('Error fetching bill data');
+                });
+
+              
+              // navigate('/dashboard')
             }else toast.error('Cant log in!');
           })
           .catch((error) => {

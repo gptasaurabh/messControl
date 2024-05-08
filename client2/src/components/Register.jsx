@@ -27,7 +27,7 @@ function Register() {
 
   useEffect(() => {
     // Fetch hostel options from the API
-    axios.get('http://localhost:5500/getAllHostels')
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/getAllHostels`)
       .then(response => {
         console.log(response.data.data.hostels);
         setHostelOptions(response.data.data.hostels);
@@ -66,7 +66,7 @@ function Register() {
       return;
     }
 
-    axios.post('http://localhost:5500/registerStudent', {
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/registerStudent`, {
       name,
       regNo,
       hostelName,

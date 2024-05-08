@@ -2,7 +2,7 @@ const FeedbackSchema = require("../schema/schemaFeedback");
 
 const getDateCorrected = async function(date){
     let date1 = date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString();
-    let correctDate = new Date(date);
+    let correctDate = new Date(date1);
     return correctDate;
 }
  

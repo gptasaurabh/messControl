@@ -55,16 +55,10 @@ const paymentVerification = async (req, res) => {
     const isAuthentic = generatedSignature === razorpay_signature;
 
     if (isAuthentic) {
-      await Payment.create({
-        amount: order.amount,
-        razorpay_order_id,
-        razorpay_payment_id,
-        razorpay_signature,
-      });
-      await addBillData({amount: order.amount, razorpay_order_id:razorpay_order_id, razorpay_payment_id:razorpay_payment_id, razorpay_signature:razorpay_signature, studentId:req.sid});
+      await addBillData({amount: (order.amount/100), razorpay_order_id:razorpay_order_id, razorpay_payment_id:razorpay_payment_id, razorpay_signature:razorpay_signature, studentId:req.sid});
       await changeFeePaidstatus(req.sid);
-      await updateFeeAmountPaid({studentId: req.sid,amount: order.amount})
-      res.send({status: 200, data:{payment_id: razorpay_payment_id, message: "Payment is success"}});
+      await updateFeeAmountPaid({studentId: req.sid,amount: order.amount/100})
+      res.send({status: 200, data:{payment_id: razorpay_payment_id, message: "Payment is success",amount: (order.amount/100)}});
     } else {
       res.status(401).json({ message: "Not Authenticated" });
     }

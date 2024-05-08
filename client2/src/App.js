@@ -11,9 +11,9 @@ import Register from './components/Register';
 import Contributors from './components/Contributors';
 import Error from './components/Error';
 import Toast from './Toast';
-import Verify from './verification/Verify';
 import Feedback from './feedback/Feedback';
 import Paymentsuccess from './components/Paymentsuccess';
+
 
 function App() {
   const navigate = useNavigate();
@@ -29,6 +29,8 @@ function App() {
     }
   }, [isAuthenticated, isAuthenticatedStudent, navigate]);
 
+  // console.log("portkfjf",process.env.REACT_APP_BACK_END_URL);
+
   return (
     <>
       <Navbar />
@@ -40,14 +42,13 @@ function App() {
 
         {isAuthenticatedStudent && <Route path="/dashboard" element={<Dashboard />} />}
         {isAuthenticatedWarden && <Route path="/warden" element={<WardenDashboard />} />}
-
+        {isAuthenticatedWarden && <Route path="/paymentsuccess" element={<Paymentsuccess />} />}
         {!isAuthenticated && (
           <>
             <Route path="/student" element={<StudentLogin />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/contributors" element={<Contributors />} />
-            <Route path="/paymentsuccess" element={<Paymentsuccess />} />
           </>
         )}
       </Routes>
