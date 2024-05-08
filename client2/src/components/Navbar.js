@@ -27,7 +27,7 @@ const Navbar = () => {
   const handleLogout = () => {
     axios.defaults.headers.common['Authorization'] = undefined;
     localStorage.removeItem('token');
-    axios.post('http://localhost:5500/logout')
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/logout`)
     .then((res) => {
       console.log("Logged out successfully");
       if (isAuthenticatedStudent) {

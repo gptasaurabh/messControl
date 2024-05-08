@@ -24,7 +24,7 @@ function WardenLogin() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:5500/warden/login', {
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/warden/login`, {
       email,
       password,
     })
@@ -37,7 +37,7 @@ function WardenLogin() {
           const hostel = res.data.data.warden.hostelName;
           console.log("Token is : "+token);
           localStorage.setItem('token', token);
-          axios.defaults.headers.common['Authorization'] = `${token}`;
+          axios.defaults.headers.common['authorization'] = `${token}`;
           console.log(token)
           dispatch(redirect_to_dashboard({
             email : email,

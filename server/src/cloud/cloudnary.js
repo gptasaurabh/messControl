@@ -17,15 +17,12 @@ const uploadFile = async (req,res) => {
         const response = await cloudinary.uploader.upload(file.path, {
             resource_type: "auto"
         });
-        
-        console.log(response.url);
         fs.unlinkSync(file.path); 
-        console.log(response.url);
-        res.json(response.url);
+        res.send({status: 200, data: {url: response.url}});
     } catch (error) {
         console.log("error");
         fs.unlinkSync(file.path);
-        return error;
+        res.send({status: 400, data: {message: "Error"+err}})
     }
 }
 

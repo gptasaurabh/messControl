@@ -10,6 +10,8 @@ const initialState = {
   roomNo: null,
   password: null,
   recoveryEmail: null,
+  feeAmount:null,
+  Amount:null,
 };
 
 const studentSlice = createSlice({
@@ -23,10 +25,14 @@ const studentSlice = createSlice({
       // console.log(action.payload.token);
       state.name = action.payload.name; 
       state.email = action.payload.email;
+      state.feeAmount = action.payload.feeAmount;
       state.regNo = action.payload.regNo;
       state.hostelName = action.payload.hostelName;
       state.roomNo = action.payload.roomNo;
       state.token = action.payload.token;
+    },
+    change_fee: (state, action) =>{
+      state.Amount = action.payload.Amount;
     },
     logoutStudent: (state) => {
       // Reset user-related information on logout
@@ -36,9 +42,10 @@ const studentSlice = createSlice({
       state.hostelName = null;
       state.roomNo = null;
       state.token = null;
+      state.feeAmount = null;
     },
   },
 });
 
-export const { register_student, redirect_to_dashboard, logoutStudent } = studentSlice.actions;
+export const { register_student, redirect_to_dashboard, logoutStudent,change_fee } = studentSlice.actions;
 export default studentSlice.reducer;

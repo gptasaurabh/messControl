@@ -128,7 +128,10 @@ const changeFeePaidstatus = async function(id){
 
 const updateFeeAmountPaid = async function(data){
     const student = await StudentSchema.findOne({_id: data.studentId});
-    await StudentSchema.findOneAndUpdate({_id: data.studentId},{feeAmount: student.feeAmount+data.amount})
+    if(student.feeAmount)
+        await StudentSchema.findOneAndUpdate({_id: data.studentId},{feeAmount: student.feeAmount+data.amount})
+    else
+        await StudentSchema.findOneAndUpdate({_id: data.studentId},{feeAmount: data.amount})
 }
 // const getStudentbyEmail
 

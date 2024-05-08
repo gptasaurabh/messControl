@@ -13,7 +13,7 @@ const addFeedback = async (req,res) => {
 
 const getFeedback = async (req, res) =>{
     try{
-        console.log('hello')
+        // console.log('hello')
         let {start_date,end_date} = req.body;
         console.log(req.body);
         let response = await getFeedbackByDate({start_date: start_date, end_date: end_date})

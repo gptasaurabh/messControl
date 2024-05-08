@@ -65,7 +65,7 @@ const WardenDashboard = () => {
     const formData = new FormData();
     formData.append('file', file);
 
-    axios.post('http://localhost:5500/fileUpload/', formData)
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
       .then(res => {
         dispatch(menu_uploaded(res.data));
         setUpdateMenu(false);
@@ -83,7 +83,7 @@ const WardenDashboard = () => {
   const handleFetchFeedback = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:5500/getFeedback',
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/getFeedback`,
       fromDate,
       toDate
     ).then( res =>{
@@ -129,36 +129,59 @@ const WardenDashboard = () => {
   const openBill = () => setShowBill(true);
   const closeBill = () => setShowBill(false);
   const [billAmount, setBillAmount] = useState("");
-  const [billFile, setBillFile] = useState(null);
+  const [billFile, setBillFile] = useState();
 
   // Function to handle bill upload
   const uploadBill = (e) => {
     e.preventDefault();
     if (!billFile || !billAmount) {
-      toast.error("Please enter all bill details.");
-      return;
+        toast.error("Please enter all bill details.");
+        return;
     }
 
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append('billAmount', billAmount);
-    formData.append('billFile', billFile);
 
-    // axios.post('http://localhost:5500/uploadBill', formData)
-    //   .then(res => {
-    //     toast.success('Bill added successfully');
-    //     setBillAmount("");
-    //     setBillFile(null);
-    //     setShowBill(false);  // Close modal on success
-    //   })
-    //   .catch(err => {
-    //     console.error(err);
-    //     toast.error('Error uploading bill');
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
-  };
+    // Step 1: Upload the file first
+    const formData = new FormData();
+    formData.append('file', billFile);
+
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
+        .then(res => {
+            console.log(res.data.data);
+            const fileUrl = res.data.data; 
+
+            // console.log("fileurl",fileUrl.url);
+            
+            const billData = {
+                billFile: fileUrl.url,
+                billAmount: billAmount
+            };
+
+            console.log("bill-",billData);
+            return axios.post(`${process.env.REACT_APP_BACK_END_URL}/warden/uploadBill`, billData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+        })
+        .then(response => {
+          console.log(response);
+            toast.success('Bill added successfully');
+            setBillFile(null);
+            setBillAmount("");
+            setShowBill(false);
+        })
+        .catch(err => {
+            console.error(err);
+            toast.error('Error uploading bill');
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+};
+
+
   
 
   return (

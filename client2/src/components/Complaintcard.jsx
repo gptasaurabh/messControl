@@ -45,7 +45,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
       // console.log("hi from inside")
       try {
         const response = await axios.get(
-          `http://localhost:5500/student/getStudent/${complaint.studentId}`
+          `${process.env.REACT_APP_BACK_END_URL}/student/getStudent/${complaint.studentId}`
         );
         // console.log("student details",response);
         setStudentName(response.data.studentName);
@@ -75,7 +75,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
       dispatch(delete_complaint(complaint._id));
 
       axios
-        .delete(`http://localhost:5500/student/deleteComplaint/${complaint._id}`)
+        .delete(`${process.env.REACT_APP_BACK_END_URL}/student/deleteComplaint/${complaint._id}`)
         .then(() => {
           console.log("complaint deleted");
         })
@@ -95,7 +95,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
 
   const handleAddComment = () => {
     axios
-      .post("http://localhost:5500/student/addComment", {
+      .post(`${process.env.REACT_APP_BACK_END_URL}/student/addComment`, {
         complaintId: complaint._id,
         comment: newComment,
         writtenBy: studentName,
@@ -113,7 +113,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
 
   const handleUpClick = async () => {
     try {
-        const response = await axios.post('http://localhost:5500/student/upvote', {
+        const response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/upvote`, {
           complaintId: complaint._id
         });
         console.log('Upvote Response:', response.data);
@@ -124,7 +124,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
 
 const handleDownClick = async () => {
     try {
-        const response = await axios.post('http://localhost:5500/student/downvote', {
+        const response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/downvote`, {
           complaintId: complaint._id
         });
         console.log('Downvote Response:', response.data);
