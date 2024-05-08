@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const paymentSchema = new mongoose.Schema({
+const schemaPayment = new mongoose.Schema({
   amount:{
     type:Number,
     required:true,
@@ -16,8 +16,12 @@ const paymentSchema = new mongoose.Schema({
   razorpay_signature: {
     type: String,
     required: true,
+  },
+  studentId: {
+    type: mongoose.Types.ObjectId,
+    ref: 'studentSchema'
   }
 });
-const Payment = mongoose.model('Payment',paymentSchema);
+const paymentSchema = mongoose.model('paymentSchema',schemaPayment);
 
-module.exports = Payment;
+module.exports = paymentSchema;

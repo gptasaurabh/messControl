@@ -121,10 +121,19 @@ const getNoOfStudentByHostelName = async function(name){
     return response.length;
 }
 
+const changeFeePaidstatus = async function(id){
+    await StudentSchema.findOneAndUpdate({_id: id},{feePaid: true});
+}
+
+
+const updateFeeAmountPaid = async function(data){
+    const student = await StudentSchema.findOne({_id: data.studentId});
+    await StudentSchema.findOneAndUpdate({_id: data.studentId},{feeAmount: student.feeAmount+data.amount})
+}
 // const getStudentbyEmail
 
 // const getStudentbyRecoveryEmail
 
 // const getStudentby
 
-module.exports = {getStudentIdbyEmail, verifyStudent, isVerifiedStudentId, isValidStudentEmail, isValidStudentRegNo, createStudent, isValidStudentRecoveryEmail, isValidStudent, getStudentbyId, isValidStudentId}
+module.exports = {changeFeePaidstatus, updateFeeAmountPaid, getStudentIdbyEmail, verifyStudent, isVerifiedStudentId, isValidStudentEmail, isValidStudentRegNo, createStudent, isValidStudentRecoveryEmail, isValidStudent, getStudentbyId, isValidStudentId}

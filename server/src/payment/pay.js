@@ -1,8 +1,7 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
-const dotenv = require('dotenv')
-dotenv.config({path: '.\\..\\config.env'})
-const Payment = require('../database/schema/paymentSchema.js');
+const { addBillData } = require('../database/operations/paymentOp');
+const { changeFeePaidstatus, updateFeeAmountPaid } = require('../database/operations/studentOp');
 
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
@@ -62,7 +61,9 @@ const paymentVerification = async (req, res) => {
         razorpay_payment_id,
         razorpay_signature,
       });
-      console.log(req.sid);
+      await addBillData({amount: order.amount, razorpay_order_id:razorpay_order_id, razorpay_payment_id:razorpay_payment_id, razorpay_signature:razorpay_signature, studentId:req.sid});
+      await changeFeePaidstatus(req.sid);
+      await updateFeeAmountPaid({studentId: req.sid,amount: order.amount})
       res.send({status: 200, data:{payment_id: razorpay_payment_id, message: "Payment is success"}});
     } else {
       res.status(401).json({ message: "Not Authenticated" });
@@ -75,4 +76,4 @@ const paymentVerification = async (req, res) => {
 
 
 
-module.exports = { instance, checkout, paymentVerification,getkey };
+module.exports = { checkout, paymentVerification, getkey};
