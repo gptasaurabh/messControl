@@ -3,7 +3,12 @@ const { hasSubmittedFeedback, getFeedbackByDate, postFeedback } = require("../..
 
 const addFeedback = async (req,res) => {
     const {ratings} = req.body;
-    res.send(await postFeedback({rating:ratings, id: req.sid}));
+    if(await hasSubmittedFeedback({id: req.sid})){
+        res.send({status: 403, data: {message: "Feedback Already Added for the day"}})
+    }
+    else{
+        res.send(await postFeedback({rating:ratings, id: req.sid}));
+    }
 }
 
 const getFeedback = async (req, res) =>{

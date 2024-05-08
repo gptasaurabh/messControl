@@ -36,6 +36,10 @@ const studentSchema = new mongoose.Schema({
     verified: {
         type: Boolean,
         required: true
+    },
+    feePaid: {
+        type: Boolean,
+        required: false
     }
 }, {timestamps: true})
 

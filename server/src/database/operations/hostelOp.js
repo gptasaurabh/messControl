@@ -28,4 +28,18 @@ const getAllHostels = async function(){
     return await HostelSchema.find({});
 }
 
-module.exports = {isValidHostelName, createHostel, getAllHostels}
+const increaseStudent = async function(name){
+    let hostel = await HostelSchema.find({hostelName: name});
+    if(hostel){
+        await HostelSchema.findOneAndUpdate({hostelName: name},{noOfStudents: (hostel.noOfStudents+1)});
+    }
+}
+
+const increaseExpense = async function(data){ 
+    let hostel = await HostelSchema.find({hostelName: data.name});
+    if(hostel){
+        await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: hostel.expense+data.expense});
+    }
+}
+
+module.exports = {increaseStudent ,isValidHostelName, createHostel, getAllHostels}

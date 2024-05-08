@@ -1,4 +1,5 @@
-const StudentSchema = require('../schema/schemaStudent')
+const StudentSchema = require('../schema/schemaStudent');
+const { increaseStudent } = require('./hostelOp');
 
 const isValidStudentEmail = async function(email){
     const existingStudent = await StudentSchema.findOne({email: email});
@@ -49,6 +50,9 @@ const createStudent = async function(data){
     }).catch((err)=>{
         response =  {status: 400, message:"some kind of error"+err};
     })
+    if(response.status===200){
+        await increaseStudent(data.hostelName);
+    }
     return response;
 }
 
@@ -106,6 +110,11 @@ const getStudentbyId = async function(_id){
     else{
         return null;
     }
+}
+
+const getNoOfStudentByHostelName = async function(name){
+    let response = await StudentSchema.find({hostelName: name});
+    return response.length;
 }
 
 // const getStudentbyEmail

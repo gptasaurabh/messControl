@@ -16,6 +16,7 @@ const { upload } = require('../middleware/multerMiddleware');
 const { uploadFile } = require('../cloud/cloudnary');
 const { countUpvotes, countDownvotes } = require('../handlers/complaint');
 const { hasGivenFeedback, getFeedback, addFeedback } = require('../handlers/student/feedback');
+const { uploadBill, getBillsbyDate } = require('../handlers/warden/billUpload');
 
 
 rootRoute.post('/registerStudent', registerStudent);
@@ -79,6 +80,10 @@ rootRoute.get('/downvotes', countDownvotes)
 rootRoute.post('/getFeedback', getFeedback)
 
 rootRoute.post('/student/giveFeedback', authS, addFeedback);
+
+rootRoute.post('/warden/uploadBill', uploadBill);
+
+rootRoute.post('/student/getBills', authS, getBillsbyDate);
 
 // rootRoute.get('/feedback', authW);
 
