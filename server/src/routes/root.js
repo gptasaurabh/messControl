@@ -18,6 +18,8 @@ const { countUpvotes, countDownvotes } = require('../handlers/complaint');
 const { hasGivenFeedback, getFeedback, addFeedback } = require('../handlers/student/feedback');
 const { uploadBill, getBillsbyDate } = require('../handlers/warden/billUpload');
 
+const {checkout,paymentVerification,getkey} = require('../payment/pay');
+
 
 rootRoute.post('/registerStudent', registerStudent);
 
@@ -80,6 +82,12 @@ rootRoute.get('/downvotes', countDownvotes)
 rootRoute.post('/getFeedback', getFeedback)
 
 rootRoute.post('/student/giveFeedback', authS, addFeedback);
+
+rootRoute.get("/getkey",getkey);
+
+rootRoute.post("/checkout",checkout);
+
+rootRoute.post("/paymentverification",paymentVerification);
 
 rootRoute.post('/warden/uploadBill', uploadBill);
 

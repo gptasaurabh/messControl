@@ -40,6 +40,7 @@ const Dashboard = () => {
   const [lunchRating, setLunchRating] = useState(2);
   const [eveningRating, setEveningRating] = useState(2);
   const [dinnerRating, setDinnerRating] = useState(2);
+  const [amount,setAmount] = useState();
   const menu = wardenData.menu;
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
@@ -53,6 +54,8 @@ const Dashboard = () => {
   const [description, setDescription] = useState("");
   const [proofImage, setProofImage] = useState();
   const studentName = studentData.name;
+  const studentEmail = studentData.email;
+  const studentReg = studentData.regNo;
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -169,10 +172,37 @@ const Dashboard = () => {
   };
 
 
-  const handlePayment = (e) =>{
+  const handlePayment = async (e) => {
     e.preventDefault();
-    closePayment();
-  }
+    const { data: { key } } = await axios.get("http://www.localhost:5500/getkey");
+    console.log("amount",amount);
+    const { data: { order } } = await axios.post("http://localhost:5500/checkout", {
+        amount
+    })
+
+    const options = {
+        key:key,
+        amount: order.amount,
+        currency: "INR",
+        name: "Mess Payment",
+        description: "Mess Fees Payment",
+        order_id: order.id,
+        callback_url: "http://localhost:5500/paymentverification",
+        prefill: {
+            name: {studentName},
+            email: {studentEmail},
+            contact: "9999999999"
+        },
+        notes: {
+            "address": "Razorpay Corporate Office"
+        },
+        theme: {
+            "color": "#121212"
+        }
+    };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+}
 
   const pageStyle = {
     display: "flex",
@@ -443,7 +473,7 @@ const Dashboard = () => {
             placeholder="Amount"
             style={{ width: '100%', padding: '8px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
             required
-            onChange={(e) => settitle(e.target.value)}
+            onChange={(e) => setAmount(e.target.value)}
           />
         </Modal.Body>
         <Modal.Footer>
