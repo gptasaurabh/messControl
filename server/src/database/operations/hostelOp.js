@@ -40,7 +40,7 @@ const increaseStudent = async function(name){
 
 const increaseExpense = async function(data){ 
     console.log(data);
-    let hostel = await HostelSchema.find({hostelName: data.name});
+    let hostel = await HostelSchema.findOne({hostelName: data.name});
     if(hostel){
         if(hostel.expense)
             await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: hostel.expense+data.expense});

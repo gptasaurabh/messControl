@@ -15,7 +15,6 @@ const config = {
 }
 
 const verifyy = async function(req, res){
-  console.log("hiiiii")
     try{
         const transporter = nodemailer.createTransport(config);
         transporter.verify(function(error, success) {
@@ -44,7 +43,7 @@ const verifyy = async function(req, res){
             })
             await newStudentVerifier.save()
         }
-        const url = `http://localhost:5500/verifyLink?id=${req.sid}&OTP=${OTP}`;
+        const url = process.env.BACK_END_URL+`/verifyLink?id=${req.sid}&OTP=${OTP}`;
         data.html = `<p><h4>Hello,</h4>
         <p>Thank you for registering. Please verify your email by clicking on the link below:</p>
         <a href="${url}">Verify Email</a></p>`

@@ -1,7 +1,7 @@
 
 const mongoose = require("mongoose")
 
-const feedbackSchema = new mongoose.Schema({
+const schemaFeedback = new mongoose.Schema({
     id: {
         type: mongoose.Types.ObjectId,
         ref: 'studentSchema',
@@ -19,6 +19,6 @@ const feedbackSchema = new mongoose.Schema({
     }
 })
 
-const FeedbackSchema = mongoose.model('feedbackSchema', feedbackSchema)
+const FeedbackSchema = mongoose.model('feedbackSchema', schemaFeedback)
 
 module.exports = FeedbackSchema

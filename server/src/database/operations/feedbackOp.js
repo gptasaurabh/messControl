@@ -1,7 +1,7 @@
 const FeedbackSchema = require("../schema/schemaFeedback");
 
 const getDateCorrected = async function(date){
-    let date1 = date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString();
+    let date1 = date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString();
     let correctDate = new Date(date1);
     return correctDate;
 }
@@ -30,8 +30,9 @@ const postFeedback = async function(data){
 
 const hasSubmittedFeedback = async function(data){
     let correctDate = await getDateCorrected(new Date());
+    console.log(correctDate)
     let feedback = await FeedbackSchema.find({id: data.id, date: correctDate});
-    if(feedback){
+    if(feedback.length>0){
         return true;
     }
     return false;
