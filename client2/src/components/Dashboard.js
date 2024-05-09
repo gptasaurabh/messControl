@@ -336,7 +336,7 @@ const Dashboard = () => {
                   Room No: {studentData.roomNo}
                 </p>
                 <pre style={{ fontSize: "18px" }}>
-                  Amount left:<span style={{color:'Highlight'}}>{studentAmount}</span>
+                  Amount left:<span style={{color:'Highlight'}}>{stAmount?stAmount:"N/A"}</span>
                 </pre>
               </p>
             </div>
