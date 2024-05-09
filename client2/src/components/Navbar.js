@@ -5,6 +5,7 @@ import {  useDispatch, useSelector } from 'react-redux';
 import { logoutStudent } from '../redux/studentSlice';
 import { logoutWarden } from '../redux/wardenSlice';
 import axios from 'axios';
+import '../css/dashboard.css'
 
 
 
@@ -63,7 +64,7 @@ const Navbar = () => {
               <span style={{ backgroundColor: 'skyblue', color: 'black', borderRadius: '8px', marginLeft: '4px' }}>SPEAK</span>
             </h2>
           </div>
-          <div className="nav-links p-2 text-light">
+          <div className="nav-links p-2 text-light nav_changes">
             {((location.pathname === '/dashboard' && isAuthenticatedStudent) || (location.pathname==='/warden') && isAuthenticatedWarden) ? (
               // If on the dashboard, show Logout tab
               <>
@@ -87,7 +88,7 @@ const Navbar = () => {
                   Register
                 </Link> */}
 
-                <Link
+                <Link  className='link-name'
         to="/"
         style={{
           ...linkStyle,

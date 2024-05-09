@@ -14,6 +14,8 @@ import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
 import { blueGrey } from '@mui/material/colors';
 import Char from '../Char';
+import '../../css/dashboard.css'
+import Footer from '../Footer';
 
 
 
@@ -98,14 +100,7 @@ const WardenDashboard = () => {
     minHeight: '100vh',
     backgroundColor: '#001F3F',
     color: 'white',
-  };
-
-  const heading = {
-    display:'flex',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '5px',
-    borderRadius: '10px',
-    border: '2px solid rgba(255, 255, 255, 0.3)',
+    justifyContent:'space-between',
   };
 
   const profilePicStyle = {
@@ -186,16 +181,14 @@ const WardenDashboard = () => {
 
   return (
     <div style={pageStyle}>
-      <div className="container mt-5" style={heading}>
-          <div className="col-md-6 mt-2">
-            <span style={{ fontSize: '30px' }}>Hostel Name : {wardenData.hostel}</span> 
-
+      <div className="container mt-5 warden-container">
+          <div style={{display:'flex',flexDirection:'column',justifyContent:'flex-start'}}>
+              <img src={defaultProfilePic} alt="Profile" style={profilePicStyle}/>
+              <h3 className='ward-text'>Warden Name: {wardenData.name}</h3>
           </div>
-          <div className="col-md-5 mt-3" align="right">
-                       <h3>Warden Name: {wardenData.name}</h3>
-          </div>
-          <div className="col-md-1  d-flex justify-content-center align-items-center">
-            <img src={defaultProfilePic} alt="Profile" style={profilePicStyle} />
+          <div className='hostel_name'>
+              <h2 className='ward-text'>Hostel Name:</h2>
+              <h3 className='ward-text'>{wardenData.hostel}</h3>
           </div>
       </div>
 
@@ -320,6 +313,7 @@ const WardenDashboard = () => {
         </form>
       </Modal.Body>
     </Modal>
+    <Footer/>
     </div>
   );
 };

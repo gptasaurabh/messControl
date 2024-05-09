@@ -16,6 +16,7 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Typography from '@mui/material/Typography';
+import '../css/dashboard.css'
 
 
 const StyledRating = styled(Rating)({
@@ -315,9 +316,9 @@ const Dashboard = () => {
     if(localStorage.getItem('token')!==null && isAuthenticatedStudent)
     return (
       <div style={pageStyle}>
-        <div className="container mt-3 shadow-lg" style={heading}>
+        <div className="container mt-3 shadow-lg custom-h" style={heading}>
           <div className="row">
-            <div className="col-md-6" align="left">
+            <div className="col-md-6 custom-left" align="left">
             {/* <div className="col-md-1 d-flex justify-content-center align-items-center"> */}
               <img
                 src={defaultProfilePic}
@@ -328,16 +329,16 @@ const Dashboard = () => {
               <p style={{marginTop:'2px',marginBottom:'2px'}}>Name: {studentData.name}</p>
               <p>Registration Number: {studentData.regNo}</p>
             </div>
-            <div className="col-md-6" align="right">
-              <span style={{ fontSize: "25px" }}>
+            <div className="col-md-6 custom-right" align="right">
+              <p style={{ fontSize: "25px" }}>
                 Hostel Name : {studentData.hostelName}{" "}
                 <p style={{ fontSize: "18px" }}>
                   Room No: {studentData.roomNo}
                 </p>
-                <p style={{ fontSize: "18px" }}>
-                  Amount left: <b style={{color:'Highlight'}}>{stAmount?stAmount:"NA"}</b>
-                </p>
-              </span>
+                <pre style={{ fontSize: "18px" }}>
+                  Amount left:<span style={{color:'Highlight'}}>{stAmount?stAmount:"N/A"}</span>
+                </pre>
+              </p>
             </div>
           </div>
         </div>
@@ -472,7 +473,6 @@ const Dashboard = () => {
         <img src={menu} alt="Hostel Image" style={{ width: '100%', height: 'auto', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} />
       </Modal.Body>
     </Modal>
-    <Footer/>
     <Modal show={showFeedBack} onHide={closeFeedback}>
         <form onSubmit={handleFeedback}>
           <Modal.Header closeButton style={{backgroundColor:'rgb(30, 6, 97)',color:'white'}}>
@@ -585,6 +585,7 @@ const Dashboard = () => {
           </Modal.Body>
         </form>
     </Modal>
+    <Footer/>
       </div>
     );
     return <Error/>

@@ -4,6 +4,7 @@ import githubImg from '../images/github.png';
 import linkedinImg from '../images/Linkedin.png';
 import Footer from './Footer';
 import img from '../images/user.png';
+import '../css/dashboard.css';
 
 // Define the keyframe animation
 const hoverAnimation = keyframes`
@@ -30,7 +31,7 @@ const CardContainer = styled.div`
 
 const Contributor = ({ name, contribution, linkedin, github, imageSrc }) => {
   return (
-    <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 card_changes">
       <CardContainer className="text-center">
         <img src={imageSrc} alt={name} style={{ width: '50%', height: 'auto', borderRadius: '50%' }} />
         <h3 className="p-2">{name}</h3>
@@ -52,7 +53,7 @@ const Contributor = ({ name, contribution, linkedin, github, imageSrc }) => {
 const Contributors = () => {
     return (
       <div>
-        <div className="container-fluid shadow-lg" style={{ height: '100vh', backgroundColor: '#001F3F' }}>
+        <div className="container-fluid shadow-lg contributor_container">
           <div className="row">
             <div className="col-md-12 text-center text-light mt-2">
               <h1 className="m-5" style={{ backgroundColor: '#001f5f', padding: '10px', borderRadius: '5px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>

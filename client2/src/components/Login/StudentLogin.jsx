@@ -233,19 +233,25 @@ const FormContainer = styled.div`
       }
       word-spacing: 2px;
     }
+    @media (max-width: 1054px) {
+      width: 60%;  // Use more of the screen on smaller devices
+      padding: 2rem 2rem;  // Reduce padding
+    }
+
     @media (max-width: 768px) {
-      width: 90%;   // Increase width for smaller screens
-      padding: 1rem; // Reduce padding
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      width: 90%;  // Use more of the screen on smaller devices
+      padding: 2rem 2rem;  // Reduce padding
+    }
 
-      input, select {
-        padding: 0.8rem; // Smaller padding for inputs
-      }
-
-      button {
-        font-size: 1.2rem; // Smaller button font size
-      }
+    @media (max-width: 480px) {
+      width: 100%;  // Use full width for very small devices
+      padding: 1rem 1rem;  // Further reduce padding
+      font-size: 90%;  // Adjust font size slightly
+    }
+    @media (max-width: 480px) {
+      width: 84%;  // Use full width for very small devices
+      padding: 1rem 1rem;  // Further reduce padding
+      font-size: 90%;  // Adjust font size slightly
     }
   }
 `;

@@ -152,28 +152,30 @@ const handleDownClick = async () => {
 
   return (
     <div className="card-component shadow-lg">
-      <CardContainer className="card container">
+      <CardContainer className="card container card_part">
         <div className="card-body">
-          <div className="title-date-vote-user">
+          <div className="card-title-txt">
             <h3 className="card-title">{complaint.title}</h3>
-            <p
+            <span
               style={{
                 borderRadius: "5px",
-                backgroundColor: "black",
                 color: "white",
+                padding:"2px",
+                fontSize:'small',
+                display:'flex',
+                justifyContent:'flex-end'
               }}
-              className="shadow-lg"
             >
               {formattedDate} | {formattedTime}
-            </p>
+            </span>
           </div>
           <hr />
           <div className="description">
             <p className="card-text fs-6 fw-light">{complaint.description}</p>
           </div>
         </div>
-        <div className="title-date-vote-user  row">
-          <div className="votebtn col-3 mt-2 ">
+        <div className="com-card">
+          <div className="votebtn">
             <h4>
               <i
                 className="fa-solid fa-circle-up"
@@ -189,7 +191,7 @@ const handleDownClick = async () => {
               {complaint.downvoteId.length}
             </h4>
           </div>
-          <div className="col-md-4 offset-4 ">
+          <div className="">
             <p className="text-light" style={{ fontSize: "15px" }}>
               By : {complaint.studentName}
               <br />
@@ -213,7 +215,7 @@ const handleDownClick = async () => {
                 onClick={handleDelete}
                 className="shadow-lg"
               >
-                Delete this complaint
+                Delete
               </Button>
             )}
           </div>
