@@ -43,6 +43,7 @@ const Dashboard = () => {
   const [eveningRating, setEveningRating] = useState(2);
   const [dinnerRating, setDinnerRating] = useState(2);
   const [amount,setAmount] = useState();
+  const [stAmount,setstAmount] = useState();
   const menu = wardenData.menu;
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
@@ -84,10 +85,18 @@ const Dashboard = () => {
 
     axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/giveFeedback`, {
         ratings: adjustedRatings
-    })
+    },{
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('token')
+      }
+  })
     .then((res) => {
         console.log(res.data);
-        toast.success("Feedback successfully submitted!");
+        if(res.data.status===200)
+          toast.success("Feedback successfully submitted!");
+        else
+          toast.error(res.data.data.message)
     })
     .catch((err) => {
         console.error(err);
@@ -123,7 +132,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchComplaintData();
-    const intervalId = setInterval(fetchComplaintData, 1000);
+    const intervalId = setInterval(fetchComplaintData, 30000);
     return () => {
       clearInterval(intervalId);
     };
@@ -138,11 +147,22 @@ const Dashboard = () => {
       .get(`${process.env.REACT_APP_BACK_END_URL}/student/dashboard`)
       .then((response) => {
         // console.log(response);
-        
+        // console.log("IOJSIOJFPOAJPOSJ")
+        // console.log(response)
         if (response.data.status === 200) {
           const studentData = response.data.data;
           // console.log(studentData.name,studentData.email,studentData.regNo,studentData.hostelName);
-          
+          if(studentData.feePaid===true){
+            axios.get(`${process.env.REACT_APP_BACK_END_URL}/student/hostelExpensePerPerson`).then((response)=>{
+              setstAmount(studentData.feeAmount-response.data.data.expense)
+            }).catch((error)=>{
+              setstAmount(undefined)
+              console.log("error"+error);
+            })
+          }
+          else{
+            setstAmount(undefined);
+          }
           dispatch(
             redirect_to_dashboard({
               name : studentData.name,
@@ -185,7 +205,7 @@ const Dashboard = () => {
         studentName,
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         dispatch(add_complaint(res.data.data));
         toast.success("success");
       })
@@ -198,12 +218,12 @@ const Dashboard = () => {
   const handlePayment = async (e) => {
     e.preventDefault();
     const { data: { key } } = await axios.get(`${process.env.REACT_APP_BACK_END_URL}/getkey`);
-    console.log("amount",amount);
+    // console.log("amount",amount);
     const { data: { order } } = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/checkout`, {
         amount
     })
-
-    console.log(order);
+    // console.log("KEY:",key)
+    // console.log(order);
     const options = {
         key:key,
         amount: order.amount,

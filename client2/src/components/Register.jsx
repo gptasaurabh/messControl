@@ -27,6 +27,8 @@ function Register() {
 
   useEffect(() => {
     // Fetch hostel options from the API
+    console.log("GET HOSTEL")
+    console.log(`${process.env.REACT_APP_BACK_END_URL}/getAllHostels`)
     axios.get(`${process.env.REACT_APP_BACK_END_URL}/getAllHostels`)
       .then(response => {
         console.log(response.data.data.hostels);

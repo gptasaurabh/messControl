@@ -69,7 +69,7 @@ const WardenDashboard = () => {
 
     axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
       .then(res => {
-        dispatch(menu_uploaded(res.data));
+        dispatch(menu_uploaded(res.data.data.url));
         setUpdateMenu(false);
         toast.success('Menu updated successfully');
       })
