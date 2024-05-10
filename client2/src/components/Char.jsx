@@ -8,7 +8,6 @@ function Char({ feedbacks }) {
   const [currentPage, setCurrentPage] = useState(0);
   const timeLabels = ['Morning', 'Noon', 'Evening', 'Dinner'];
 
-
   const generateChartData = (feedback, index) => {
     return {
       labels: ['0', '1', '2', '3', '4'],
@@ -36,6 +35,24 @@ function Char({ feedbacks }) {
     };
   };
 
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          // Force step size to 1 and only integer values
+          stepSize: 1,
+          callback: function(value) {
+            if (value % 1 === 0) {
+              return value;
+            }
+          }
+        }
+      }
+    }
+  };
 
   const goToNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, feedbacks.length - 1));
@@ -48,8 +65,8 @@ function Char({ feedbacks }) {
   return (
     <div style={{ width: '100%', height: '50vh' }}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%' }}>
-        <div style={{ width: '100%', height: '100%',backgroundColor: 'rgb(19, 10, 86)' }}>
-          <Bar data={generateChartData(feedbacks[currentPage], currentPage)} options={{ responsive: true, maintainAspectRatio: false }} />
+        <div style={{ width: '100%', height: '100%', backgroundColor: 'rgb(19, 10, 86)' }}>
+          <Bar data={generateChartData(feedbacks[currentPage], currentPage)} options={chartOptions} />
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '10%' }}>
