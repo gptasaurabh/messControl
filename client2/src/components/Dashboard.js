@@ -208,7 +208,12 @@ const Dashboard = () => {
           // console.log(studentData.name,studentData.email,studentData.regNo,studentData.hostelName);
           if(studentData.feePaid===true){
             axios.get(`${process.env.REACT_APP_BACK_END_URL}/student/hostelExpensePerPerson`).then((response)=>{
-              setstAmount(studentData.feeAmount-response.data.data.expense)
+              // console.log("expences",response.data.data.expense);
+              let amt=studentData.feeAmount-response.data.data.expense;
+              if(amt<0){
+                amt=0;
+              }
+              setstAmount(amt);
             }).catch((error)=>{
               setstAmount(undefined)
               // console.log("error"+error);
@@ -252,22 +257,34 @@ const Dashboard = () => {
 
   const handleComplaint = (e) => {
     e.preventDefault();
-    axios
-      .post(`${process.env.REACT_APP_BACK_END_URL}/student/addComplaint`, {
-        title,
-        description,
-        proofImage,
-        studentName,
+
+    const formData = new FormData();
+    formData.append('file', proofImage);
+
+    axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
+      .then(res => {
+        // setProofImage(res.data.data.url);
+        const image_url=res.data.data.url;
+        // console.log("hellods--",image_url,res.data.data.url);
+        axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/addComplaint`, {
+            title,
+            description,
+            image_url,
+            studentName,
+          })
+          .then((res) => {
+            // console.log(res.data);
+            dispatch(add_complaint(res.data.data));
+            toast.success("Complaint added successfully");
+          })
+          .catch((err) => {
+            // console.log(err);
+            toast.error("err in adding complaint");
+          });
       })
-      .then((res) => {
-        // console.log(res.data);
-        dispatch(add_complaint(res.data.data));
-        toast.success("Complaint added successfully");
+      .catch(err => {
+        toast.error(err);
       })
-      .catch((err) => {
-        // console.log(err);
-        toast.error("err in adding complaint");
-      });
   };
 
 

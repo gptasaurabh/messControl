@@ -107,7 +107,7 @@ const WardenDashboard = () => {
         toast.success('Menu updated successfully');
       })
       .catch(err => {
-        console.error(err);
+        toast.error(err);
       })
       .finally(() => {
         setIsLoading(false);
