@@ -38,12 +38,11 @@ const increaseStudent = async function(name){
     }
 }
 
-const increaseExpense = async function(data){ 
-    console.log(data);
+const increaseExpense = async function(data){
     let hostel = await HostelSchema.findOne({hostelName: data.name});
     if(hostel){
         if(hostel.expense)
-            await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: hostel.expense+data.expense});
+            await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: hostel.expense+Number(data.expense)});
         else
             await HostelSchema.findOneAndUpdate({hostelName: data.name},{expense: data.expense});
     }
@@ -51,6 +50,10 @@ const increaseExpense = async function(data){
 
 const getHostelExpense = async function(hostelName){
     let hostel = await HostelSchema.findOne({hostelName: hostelName});
+    if(hostel.noOfStudents===0){
+        await increaseStudent(hostel.hostelName);
+    }
+    // console.log(hostel)
     if(hostel){
         return (hostel.expense/hostel.noOfStudents);
     }

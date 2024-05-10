@@ -11,8 +11,8 @@ const instance = new Razorpay({
 // console.log("Razorpay Key:", process.env.RAZORPAY_API_KEY);
 // console.log("Razorpay Secret:", process.env.RAZORPAY_API_SECRET);
 const getkey = (req, res) =>{
-  console.log(req.body);
-  console.log(process.env.RAZORPAY_API_KEY);
+  // console.log(req.body);
+  // console.log(process.env.RAZORPAY_API_KEY);
   res.status(200).json({ key: process.env.RAZORPAY_API_KEY })
 }
 
@@ -38,7 +38,7 @@ const checkout = async (req, res) => {
 
 const paymentVerification = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature,razorpay_amount } = req.body;
     
     const order = await instance.orders.fetch(razorpay_order_id);

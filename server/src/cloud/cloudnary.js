@@ -17,11 +17,12 @@ const uploadFile = async (req,res) => {
             resource_type: "auto"
         });
         fs.unlinkSync(file.path); 
+        // console.log("hello")
         res.send({status: 200, data: {url: response.url}});
     } catch (error) {
         console.log("error in upload file:" + error);
         fs.unlinkSync(file.path);
-        res.send({status: 400, data: {message: "Error"+err}})
+        res.send({status: 400, data: {message: "Error"+error}})
     }
 }
 
