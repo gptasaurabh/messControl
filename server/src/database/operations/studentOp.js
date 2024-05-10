@@ -133,10 +133,15 @@ const updateFeeAmountPaid = async function(data){
     else
         await StudentSchema.findOneAndUpdate({_id: data.studentId},{feeAmount: data.amount})
 }
+
+const addImage = async function(data){
+    await StudentSchema.findOneAndUpdate({_id:data.studentId},{profileImg: data.image_url});
+    return true;
+}
 // const getStudentbyEmail
 
 // const getStudentbyRecoveryEmail
 
 // const getStudentby
 
-module.exports = {changeFeePaidstatus, updateFeeAmountPaid, getStudentIdbyEmail, verifyStudent, isVerifiedStudentId, isValidStudentEmail, isValidStudentRegNo, createStudent, isValidStudentRecoveryEmail, isValidStudent, getStudentbyId, isValidStudentId}
+module.exports = {addImage, changeFeePaidstatus, updateFeeAmountPaid, getStudentIdbyEmail, verifyStudent, isVerifiedStudentId, isValidStudentEmail, isValidStudentRegNo, createStudent, isValidStudentRecoveryEmail, isValidStudent, getStudentbyId, isValidStudentId}

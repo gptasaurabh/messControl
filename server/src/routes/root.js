@@ -20,6 +20,8 @@ const { uploadBill, getBillsbyDate } = require('../handlers/warden/billUpload');
 
 const {checkout,paymentVerification,getkey} = require('../payment/pay');
 const { getHostelExpense } = require('../database/operations/hostelOp');
+const { uploadStudentProfile } = require('../handlers/student/update');
+const { uploadWardenProfile } = require('../handlers/warden/update');
 
 
 rootRoute.post('/registerStudent', registerStudent);
@@ -99,6 +101,10 @@ rootRoute.post('/warden/uploadBill', authW, uploadBill);
 rootRoute.post('/student/getBills', authS, getBillsbyDate);
 
 rootRoute.get('/student/hostelExpensePerPerson', authS, getHostelExpensePerPerson);
+
+rootRoute.post('/student/uploadProfile', uploadStudentProfile);
+
+rootRoute.post('/warden/uploadFile', uploadWardenProfile);
 
 // rootRoute.get('/feedback', authW);
 

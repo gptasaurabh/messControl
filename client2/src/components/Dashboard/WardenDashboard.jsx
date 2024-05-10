@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import Navbar from './Navbar';
 import defaultProfilePic from '../../images/user.png';
 // import Footer from './Footer';
@@ -37,6 +37,28 @@ const WardenDashboard = () => {
 
   const authToken = localStorage.getItem('token');
 
+  useEffect(() => {
+    fetchComplaintData();
+    const intervalId = setInterval(fetchComplaintData, 30000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+
+  const fetchComplaintData = () => {
+    const authToken = localStorage.getItem('token');
+    axios.defaults.headers.common['Authorization'] = authToken;axios
+    .get(`${process.env.REACT_APP_BACK_END_URL}/warden/dashboard`)
+    .then((response) => {
+      dispatch(
+        get_all_complaints({
+          complaints: response.data.data.complaints,
+        }));
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
 
 
   // const [complaintlist,setComplaintlist] = useState(true);

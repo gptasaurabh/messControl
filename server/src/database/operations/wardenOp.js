@@ -70,5 +70,9 @@ const addHostelToWarden = async function(data){
     await warden.save();
 }
 
+const addImage = async function(data){
+    await WardenSchema.findOneAndUpdate({_id:data.wardenId},{profileImg: data.image_url});
+    return true;
+}
 
 module.exports = {getAllUnassginedWarden, addHostelToWarden, isValidWardenId, isValidWarden, createWarden, isValidWardenEmail, isValidWardenRecoveryEmail, getWardenById, getWardenByEmail, isValidWarden}

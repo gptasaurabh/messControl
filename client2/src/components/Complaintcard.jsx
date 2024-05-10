@@ -62,7 +62,16 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
     setShowCommentsOnCard((prev) => !prev);
   };
 
-  const handleSolved = () => {
+  const handleSolved = (e) => {
+    e.preventDefault();
+    axios
+      .post(`${process.env.REACT_APP_BACK_END_URL}/warden/resolveComplaint`, {complaintId: complaint._id})
+      .then((res) => {
+        console.log("solved response",res);
+      })
+      .catch((err) => {
+        console.log("Can't solve:", err);
+      });
     setSolved(true);
   }
 
