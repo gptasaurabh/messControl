@@ -7,6 +7,7 @@ const initialState = {
   name:null,
   hostel:null,
   menu:null,
+  image:null,
 };
 
 const wardenSlice = createSlice({
@@ -38,9 +39,12 @@ const wardenSlice = createSlice({
     },
     menu_uploaded: (state, action) =>{
       state.menu = action.payload;
+    },
+    change_in_image_dash : (state,action)=>{
+      state.image = action.payload.image;
     }
   },
 });
 
-export const {  redirect_to_dashboard, logoutWarden, create_warden,get_unassigned_wardens,menu_uploaded } = wardenSlice.actions;
+export const { change_in_image_dash, redirect_to_dashboard, logoutWarden, create_warden,get_unassigned_wardens,menu_uploaded } = wardenSlice.actions;
 export default wardenSlice.reducer;

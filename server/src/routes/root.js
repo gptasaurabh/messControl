@@ -102,9 +102,9 @@ rootRoute.post('/student/getBills', authS, getBillsbyDate);
 
 rootRoute.get('/student/hostelExpensePerPerson', authS, getHostelExpensePerPerson);
 
-rootRoute.post('/student/uploadProfile', uploadStudentProfile);
+rootRoute.post('/student/uploadProfile',authS, uploadStudentProfile);
 
-rootRoute.post('/warden/uploadFile', uploadWardenProfile);
+rootRoute.post('/warden/uploadFile', authW,uploadWardenProfile);
 
 // rootRoute.get('/feedback', authW);
 

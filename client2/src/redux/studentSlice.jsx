@@ -12,6 +12,7 @@ const initialState = {
   recoveryEmail: null,
   feeAmount:null,
   Amount:null,
+  image:null,
 };
 
 const studentSlice = createSlice({
@@ -34,6 +35,9 @@ const studentSlice = createSlice({
     change_fee: (state, action) =>{
       state.Amount = action.payload.Amount;
     },
+    change_in_prof_img: (state, action) =>{
+      state.image = action.payload.image;
+    },
     logoutStudent: (state) => {
       // Reset user-related information on logout
       state.name = null;
@@ -47,5 +51,5 @@ const studentSlice = createSlice({
   },
 });
 
-export const { register_student, redirect_to_dashboard, logoutStudent,change_fee } = studentSlice.actions;
+export const { change_in_prof_img,register_student, redirect_to_dashboard, logoutStudent,change_fee } = studentSlice.actions;
 export default studentSlice.reducer;
