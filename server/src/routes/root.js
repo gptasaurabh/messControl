@@ -2,7 +2,7 @@ const express = require('express')
 const rootRoute = express.Router()
 const {loginStudent, logout, registerStudent} = require('../handlers/student/loginSignup');
 const { registerWarden, registerHostel, chiefWardeDashboard, getUnassignedWardens, getComplaintForHostel } = require('../handlers/chiefWarden/dashboard');
-const { getAllHostels, getHostelExpensePerPerson } = require('../handlers/hostelQuery');
+const { getAllHostels, getHostelExpensePerPerson, getMessMenu, updateMessMenuWarden } = require('../handlers/hostelQuery');
 const { studentDashboard, addComplaint, deleteComplaint, addComment, deleteComment, toggleLike, upvote, downvote } = require('../handlers/student/dashboard');
 const { authCW } = require('../auth/authChiefWarden');
 const { loginChiefWarden, registerChiefWarden } = require('../handlers/chiefWarden/loginSignup');
@@ -106,6 +106,11 @@ rootRoute.post('/student/uploadProfile',authS, uploadStudentProfile);
 
 rootRoute.post('/warden/uploadFile', authW,uploadWardenProfile);
 
+rootRoute.get('/student/messMenu', authS, getMessMenu);
+
+rootRoute.get('/warden/messMenu', authW, getMessMenu);
+
+rootRoute.post('/warden/uploadMenu', authW, updateMessMenuWarden);
 // rootRoute.get('/feedback', authW);
 
 module.exports = rootRoute

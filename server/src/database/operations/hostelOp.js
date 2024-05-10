@@ -1,7 +1,7 @@
 const HostelSchema = require("../schema/schemaHostel");
 
 const isValidHostelName = async function(name){
-    let existingHostel =await  HostelSchema.findOne({hostelName: name});
+    let existingHostel =await HostelSchema.findOne({hostelName: name});
     if(existingHostel)
         return true;
     else
@@ -60,4 +60,13 @@ const getHostelExpense = async function(hostelName){
     return 0;
 }
 
-module.exports = {getHostelExpense, increaseExpense, increaseStudent ,isValidHostelName, createHostel, getAllHostels}
+const updateMessMenu = async function(data){
+    let hostel = await HostelSchema.findOneAndUpdate({hostelName: data.hostelName},{messMenu: data.messMenu});
+}
+
+const getMessMenuDB = async function(hostelName){
+    let hostel = await HostelSchema.findOne({hostelName: hostelName});
+    return hostel.messMenu;
+}
+
+module.exports = {updateMessMenu, getMessMenuDB, getHostelExpense, increaseExpense, increaseStudent ,isValidHostelName, createHostel, getAllHostels}

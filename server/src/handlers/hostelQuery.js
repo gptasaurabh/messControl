@@ -11,14 +11,15 @@
 
 // module.exports = {getAllHostels}
 
-const { getHostelExpense } = require("../database/operations/hostelOp");
+const { getHostelExpense, updateMessMenu, getMessMenuDB } = require("../database/operations/hostelOp");
 const { getStudentbyId } = require("../database/operations/studentOp");
+const { getWardenById } = require("../database/operations/wardenOp");
 const HostelSchema = require("../database/schema/schemaHostel");
 
 const getAllHostels = async (req, res) => {
     try {
         const hostels = await HostelSchema.find({}, 'hostelName');
-        console.log(hostels);
+        // console.log(hostels);
         res.send({
             status: 200,
             data: {
@@ -27,8 +28,8 @@ const getAllHostels = async (req, res) => {
         });
     } catch (error) {
         console.error('Failed to retrieve hostels:', error);
-        res.status(500).send({
-            status: 500,
+        res.status(400).send({
+            status: 400,
             message: "Failed to retrieve data from the database"
         });
     }
@@ -41,9 +42,39 @@ const getHostelExpensePerPerson = async function(req, res){
         res.send({status:200, data:{expense: hostelExpense}})
     }
     catch(err){
-        console.log("Error om hostel expense: "+err)
+        console.log("Error in hostel expense: "+err)
         res.send({status:400,message:"error:"+err})
     }
 }
 
-module.exports = { getAllHostels , getHostelExpensePerPerson};
+const updateMessMenuWarden = async function(req, res){
+    try{
+        let warden = await getWardenById(req.wid);
+        await updateMessMenu({hostelName: warden.hostelName, messMenu: req.body.menu_url});
+        res.send({status: 200, data:{message:"Menu updated successfully"}})
+    }
+    catch(err){
+        console.log("Error in update mess menu: "+err);
+        res.send({status: 400, data:{message: "Error: Menu not updated"}})
+    }
+}
+
+const getMessMenu = async function(req, res){
+    try{
+        let user;
+        if(req.sid){
+            user = await getStudentbyId(req.sid);
+        }
+        if(req.wid){
+            user = await getWardenById(req.wid)
+        }
+        let response = await getMessMenuDB(user.hostelName)
+        res.send({status:200, data:{messMenu:response}});
+    }
+    catch(err){
+        console.log("Error in getting mess menu: "+err);
+        res.send({status: 400, data:{message: "Error: Not able to fetch menu"}})
+    }
+}
+
+module.exports = { getMessMenu, updateMessMenuWarden, getAllHostels , getHostelExpensePerPerson};
