@@ -25,10 +25,11 @@ const studentDashboard = async function(req,res,next){
 }
 
 const addComplaint = async function(req,res){
-    let {title,description,proofImg} = req.body;
+    let {title,description,image_url} = req.body;
+    // console.log(req.body);
     let student = await getStudentbyId(req.sid);
     if(student){
-        res.send(await createComplaint({title: title, description: description, proofImg: proofImg, hostelName: student.hostelName, _id: req.sid}))
+        res.send(await createComplaint({title: title, description: description, proofImg: image_url, hostelName: student.hostelName, _id: req.sid}))
     }
     else
         res.send({status:400, message: "student doesnt exist"});
