@@ -228,13 +228,15 @@ const handleDownClick = async () => {
           >
             {showCommentsOnCard ? "Hide comments" : "View all comments"}
           </Button>
-          <Button
-            variant="link"
-            className="text-decoration-none text-lowercase fs-6"
-            onClick={openCommentPopup}
-          >
-            Add a comment
-          </Button>
+          {!wardenData && (
+              <Button
+              variant="link"
+              className="text-decoration-none text-lowercase fs-6"
+              onClick={openCommentPopup}
+            >
+              Add comment
+            </Button>
+            )}
           {showCommentsOnCard && (
             <div className="comments">
               <hr />
