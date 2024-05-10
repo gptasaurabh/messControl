@@ -35,6 +35,7 @@ const getCommentById = async function(data){
 }
 
 const createComplaint = async function(data){
+    console.log(data.proofImg);
     const complaint = new ComplaintSchema({
         title: data.title,
         description: data.description,

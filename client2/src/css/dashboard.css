@@ -55,8 +55,8 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   cursor: pointer;
-  width:55px;
-  height: 55px;
+  width: 70px;
+  height: 70px;
 }
 .overlay-update-warden {
   position: absolute;

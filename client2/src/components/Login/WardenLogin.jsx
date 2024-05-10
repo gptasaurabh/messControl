@@ -69,7 +69,7 @@ function WardenLogin() {
   };
 
   return (
-    <>
+    <div>
          <FormContainer>
           <form onSubmit={handleLogin}>
             <div className="brand">
@@ -93,14 +93,13 @@ function WardenLogin() {
       </FormContainer>
       <ToastContainer />
       <Footer/>
-      
-    </>
+    </div>
   )
 }
 
 
 const FormContainer = styled.div`
-  height: 110%;
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
