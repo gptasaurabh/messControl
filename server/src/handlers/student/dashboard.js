@@ -57,42 +57,52 @@ const deleteComplaint = async function(req, res){
             res.send(await deleteComplaintbyId(complaintId));
         }
         else{
-            res.send({status: 400, data: "complaint is not raised by the user"})
+            res.send({status: 400, message: "complaint is not raised by the user"})
         }
     }
     else{
-        res.send({status: 400, data: "complaint doesnt seem to exist"})
+        res.send({status: 400, message: "complaint doesnt seem to exist"})
     }
 }
 
 const addComment = async function(req, res){
-    console.log(req.body)
-    const {comment, complaintId} = req.body;
-    let complaint = await getComplaintById(complaintId);
-    let student = await getStudentbyId(req.sid);
-    // console.log(student);
-    if(student && complaint &&student.hostelName === complaint.hostelName){
-        res.send(await addCommentInComplaint({comment, complaintId, writtenBy: student.name}));
+    try{
+        const {comment, complaintId} = req.body;
+        let complaint = await getComplaintById(complaintId);
+        let student = await getStudentbyId(req.sid);
+        if(student && complaint &&student.hostelName === complaint.hostelName){
+            res.send(await addCommentInComplaint({comment, complaintId, writtenBy: student.name}));
+        }
+        else{
+            res.send({status: 400, message: "complaint doesnt exist"});
+        }
     }
-    else{
-        res.send({status: 400, message: "complaint doesnt exist"});
+    catch(err){
+        console.log("error in add comment: "+err);
+        res.send({status: 400, message: "Error"+err});
     }
 }
 
 const deleteComment = async function(req, res){
-    const {commentId, complaintId} = req.query;
-    const comment = await getCommentById({complaintId, commentId});
-    if(comment&&comment.writtenBy==req.sid){
-        res.send(await deleteCommentById({complaintId, commentId}));
+    try{
+        const {commentId, complaintId} = req.query;
+        const comment = await getCommentById({complaintId, commentId});
+        if(comment&&comment.writtenBy==req.sid){
+            res.send(await deleteCommentById({complaintId, commentId}));
+        }
+        else{
+            res.send({status: 400, message: "you are not authorized to do this"})
+        }
     }
-    else{
-        res.send({status: 400, message: "you are not authorized to do this"})
+    catch(err){
+        console.log("error in delete comment: "+err);
+        res.send({status: 400, message: "Error"+err});
     }
 }
 
 const toggleLike = async function(req, res){
     const {commentId, complaintId} = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const comment = await getCommentById({complaintId, commentId});
     if(comment){
         let response =await toggleLikeInComment({complaintId, commentId, _id: req.sid})
@@ -126,7 +136,7 @@ const upvote = async function(req, res){
             }
             else{
                 await addUpvote({_id: req.sid, complaintId});
-                console.log(req.sid);
+                // console.log(req.sid);
                 res.send({status: 200, data: {message: "upvoted successfully"}})
             }
         }

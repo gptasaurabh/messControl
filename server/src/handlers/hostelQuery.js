@@ -41,7 +41,7 @@ const getHostelExpensePerPerson = async function(req, res){
         res.send({status:200, data:{expense: hostelExpense}})
     }
     catch(err){
-        console.log(err)
+        console.log("Error om hostel expense: "+err)
         res.send({status:400,message:"error:"+err})
     }
 }

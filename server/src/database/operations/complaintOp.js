@@ -9,7 +9,7 @@ const getComplaintsByStudentId = async function(_id){
 }
 
 const getComplaintsByHostelName = async function(hostelName){
-    console.log(hostelName)
+    // console.log(hostelName)
     return await ComplaintSchema.find({hostelName: hostelName});
 }
 
@@ -21,7 +21,7 @@ const getCommentById = async function(data){
     let complaint = await ComplaintSchema.findById(data.complaintId);
     if(complaint){
         let existingComment = complaint.comments.filter(doc=>data.commentId==doc._id);
-        console.log(existingComment)
+        // console.log(existingComment)
         if(existingComment.lenth!=0){
             return existingComment[0];
         }
@@ -48,7 +48,7 @@ const createComplaint = async function(data){
     // console.log(complaint)
     let response;
     await complaint.save().then((doc)=>{
-        console.log(doc)
+        // console.log(doc)
         response =  {status:200, data:doc}
     }).catch((err)=>{
         response =  {status:400, error: "error creating complaint: "+err}
@@ -66,6 +66,7 @@ const deleteComplaintbyId = async function(_id){
     }).catch((err)=>{
         response = {status: 400, message: err};
     })
+    // console.log(response)
     return response;
 }
 

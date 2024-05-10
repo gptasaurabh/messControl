@@ -30,7 +30,6 @@ const postFeedback = async function(data){
 
 const hasSubmittedFeedback = async function(data){
     let correctDate = await getDateCorrected(new Date());
-    console.log(correctDate)
     let feedback = await FeedbackSchema.find({id: data.id, date: correctDate});
     if(feedback.length>0){
         return true;

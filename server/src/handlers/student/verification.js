@@ -47,14 +47,14 @@ const verifyy = async function(req, res){
         data.html = `<p><h4>Hello,</h4>
         <p>Thank you for registering. Please verify your email by clicking on the link below:</p>
         <a href="${url}">Verify Email</a></p>`
-        console.log(data.html)
+        // console.log(data.html)
         // data.text = "hello this is a verification email"
-        console.log(data);
+        // console.log(data);
         transporter.sendMail(data, (err,info)=>{
             if(err)
                 console.log(err)
-            else
-                console.log(info)
+            // else
+            //     console.log(info)
         })
         res.send({status: 200, data:{message: "email sent"}})
     }

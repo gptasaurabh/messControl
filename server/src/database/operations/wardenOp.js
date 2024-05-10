@@ -46,7 +46,7 @@ const createWarden = async function(data){
     }).catch((err)=>{
         response = {status: 400, message:"some kind of error"+err};
     })
-    console.log(response)
+    // console.log(response)
     return response;
 }
 const getWardenById = async function(_id){

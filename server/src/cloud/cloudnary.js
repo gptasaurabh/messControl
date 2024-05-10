@@ -10,7 +10,6 @@ cloudinary.config({
 const uploadFile = async (req,res) => {
     
     const file = req.file;
-    console.log(file);
     try {
         if (!file) return null;
 
@@ -20,7 +19,7 @@ const uploadFile = async (req,res) => {
         fs.unlinkSync(file.path); 
         res.send({status: 200, data: {url: response.url}});
     } catch (error) {
-        console.log("error");
+        console.log("error in upload file:" + error);
         fs.unlinkSync(file.path);
         res.send({status: 400, data: {message: "Error"+err}})
     }

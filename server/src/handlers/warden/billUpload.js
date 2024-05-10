@@ -21,7 +21,7 @@ const uploadBill = async function(req, res){
 const getBillsbyDate = async function(req, res){
     try{
         let response = await getBills({date: req.body.date});
-        console.log(response)
+        // console.log(response)
         res.send({status: 200, data: response});
     }
     catch(err){

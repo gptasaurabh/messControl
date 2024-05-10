@@ -2,15 +2,19 @@ const jwt = require('jsonwebtoken')
 const {isValidStudentEmail, isValidStudentRegNo, isValidStudentRecoveryEmail, createStudent, isValidStudent, isVerifiedStudentId} = require('../../database/operations/studentOp')
 
 const registerStudent = async (req,res)=>{
-    const {name, regNo, email, password, hostelName, recoveryEmail, roomNo} = req.body
-    if((await isValidStudentEmail(email)) || (await isValidStudentRecoveryEmail(recoveryEmail)) || (await isValidStudentRegNo(regNo))){
-        res.send({status: 400, message: "Unquie Fields contain existing values"})
+    try{
+        const {name, regNo, email, password, hostelName, recoveryEmail, roomNo} = req.body
+        if((await isValidStudentEmail(email)) || (await isValidStudentRecoveryEmail(recoveryEmail)) || (await isValidStudentRegNo(regNo))){
+            res.send({status: 400, message: "Unquie Fields contain existing values"})
+        }
+        else{
+            let data = {name, regNo, email, password, hostelName, recoveryEmail, roomNo}
+            const obj= await createStudent(data)
+            res.send({status: 200, data: obj});
+        }
     }
-    else{
-        let data = {name, regNo, email, password, hostelName, recoveryEmail, roomNo}
-        const obj= await createStudent(data)
-        console.log(obj)
-        res.send({status: 200, data: obj});
+    catch(err){
+        res.send({status: 400, data:{message: "Error: "+err}});
     }
 }
 

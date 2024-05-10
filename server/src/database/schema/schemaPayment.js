@@ -21,7 +21,7 @@ const schemaPayment = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: 'studentSchema'
   }
-});
+}, {timestamps: true});
 const paymentSchema = mongoose.model('paymentSchema',schemaPayment);
 
 module.exports = paymentSchema;

@@ -8,7 +8,7 @@ const { authCW } = require('../auth/authChiefWarden');
 const { loginChiefWarden, registerChiefWarden } = require('../handlers/chiefWarden/loginSignup');
 const {authS, authSL} = require('../auth/authStudent');
 const { getStudentDetailById } = require('../handlers/studentQuery');
-const { wardenDashboard } = require('../handlers/warden/dashboard');
+const { wardenDashboard, resolveComplaint, deleteComplaintW } = require('../handlers/warden/dashboard');
 const { loginWarden } = require('../handlers/warden/loginSignup');
 const { authW } = require('../auth/authWarden');
 const { verifyy, verifyLink } = require('../handlers/student/verification');
@@ -61,6 +61,10 @@ rootRoute.get('/student/getStudent/:id', authS, getStudentDetailById);
 rootRoute.post('/warden/login', loginWarden)
 
 rootRoute.get('/warden/dashboard', authW, wardenDashboard)
+
+rootRoute.post('/warden/resolveComplaint', authW, resolveComplaint)
+
+rootRoute.post('/warden/deleteComplaint', authW, deleteComplaintW)
 
 // rootRoute.get('/chiefWarden/dashboard', authCW, chiefWardeDashboard)
 
