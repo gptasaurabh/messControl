@@ -1,8 +1,9 @@
-const { addImage } = require("../../database/operations/wardenOp")
+const {addImage}  = require("../../database/operations/wardenOp")
 
 const uploadWardenProfile = async function(req, res){
+    console.log("profile",req.body.image_url);
     try{
-        if(await addImage({wardenId: req.wid, image_url: req.data.image_url})){
+        if(await addImage({wardenId: req.wid, image_url: req.body.image_url})){
             res.send({status: 200, data: {message: "Successfully updated the image"}});
         }
         else

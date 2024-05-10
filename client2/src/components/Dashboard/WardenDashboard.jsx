@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // import Navbar from './Navbar';
 import defaultProfilePic from '../../images/user.png';
 // import Footer from './Footer';
@@ -6,7 +6,7 @@ import { Button, Modal, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import {useDispatch} from 'react-redux'
 import { add_complaint,get_all_complaints,get_my_complaints } from '../../redux/complaintSlice';
-import { menu_uploaded } from '../../redux/wardenSlice';
+import { change_in_image_dash, menu_uploaded } from '../../redux/wardenSlice';
 import axios from 'axios';
 import Error from '../Error';
 import Complaintcard from '../Complaintcard';
@@ -29,6 +29,8 @@ const WardenDashboard = () => {
   const [showAllComplaints, setShowAllComplaints] = useState(true);
   const [fromDate, setFromDate] = useState(new Date().toISOString().split('T')[0]);
   const [toDate, setToDate] = useState(new Date().toISOString().split('T')[0]);
+  const [profilePic, setProfilePic] = useState(defaultProfilePic);
+  const fileInputRef = useRef(null);
 
   // const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
@@ -36,6 +38,7 @@ const WardenDashboard = () => {
   // console.log(myComplaints.myComplaints);
 
   const authToken = localStorage.getItem('token');
+
 
   useEffect(() => {
     fetchComplaintData();
@@ -51,12 +54,20 @@ const WardenDashboard = () => {
     axios.defaults.headers.common['Authorization'] = authToken;axios
     .get(`${process.env.REACT_APP_BACK_END_URL}/warden/dashboard`)
     .then((response) => {
+      if(response.data.data.profileImg){
+        dispatch(
+          change_in_image_dash ({
+            image: response.data.data.profileImg,
+          })
+        )
+        setProfilePic(response.data.data.profileImg);
+      }
       dispatch(
         get_all_complaints({
           complaints: response.data.data.complaints,
         }));
     }).catch((err)=>{
-      console.log(err)
+      toast.error(err);
     })
   }
 
@@ -112,7 +123,6 @@ const WardenDashboard = () => {
       toDate
     ).then( res =>{
       setFeedBacks(res.data.data.feedbacks);
-      console.log("respond",feedBacks);
     })
   };
 
@@ -157,14 +167,14 @@ const WardenDashboard = () => {
     }
 
     setIsLoading(true);
-
+    // console.log("bill-",billFile);
     // Step 1: Upload the file first
     const formData = new FormData();
     formData.append('file', billFile);
 
     axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
         .then(res => {
-            console.log(res.data.data);
+          if(res.data.status===200){
             const fileUrl = res.data.data; 
 
             // console.log("fileurl",fileUrl.url);
@@ -174,23 +184,25 @@ const WardenDashboard = () => {
                 billAmount: billAmount
             };
 
-            console.log("bill-",billData);
             return axios.post(`${process.env.REACT_APP_BACK_END_URL}/warden/uploadBill`, billData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': localStorage.getItem('token')
                 }
             });
+          }
+          else{
+            toast.error("file not uploded retry after some time")
+          }
+
         })
         .then(response => {
-          console.log(response);
             toast.success('Bill added successfully');
             setBillFile(null);
             setBillAmount("");
             setShowBill(false);
         })
         .catch(err => {
-            console.error(err);
             toast.error('Error uploading bill');
         })
         .finally(() => {
@@ -199,13 +211,69 @@ const WardenDashboard = () => {
 };
 
 
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      // console.log("images-",event.target.files[0]);
+      const formData = new FormData();
+      formData.append('file', event.target.files[0]);
+      
+      axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
+      .then(res => {
+
+        if(res.data.status==200){
+          const newImage = res.data.data.url;
+          // setProfilePic(newImage);
+          const prof_image = { image_url: newImage };
+
+          return axios.post(`${process.env.REACT_APP_BACK_END_URL}/warden/uploadFile`, prof_image, {
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': localStorage.getItem('token')
+              }
+          });
+        }
+        else{
+          toast.error("Failed to upload image. Please try again.");
+        }
+      })
+      .then(res => {
+        toast.success("profile image uploaded successfully");
+      })
+      .catch(error => {
+        toast.error("Failed to upload image. Please try again.");
+      });
+
+    }
+    else{
+      toast.error("Add file correctly");
+    }
+  };
+
   
 
   return (
     <div style={pageStyle}>
       <div className="container mt-5 warden-container">
           <div style={{display:'flex',flexDirection:'column',justifyContent:'flex-start'}}>
-              <img src={defaultProfilePic} alt="Profile" style={profilePicStyle}/>
+          <div className="profile-pic-container" onClick={handleImageClick}>
+              <img
+                src={profilePic}
+                alt="Profile"
+                style={profilePicStyle}
+              />
+              <div className="overlay-update-warden">Edit</div>
+              <input
+                type="file"
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+              />
+            </div>
               <h3 className='ward-text'>Warden Name: {wardenData.name}</h3>
           </div>
           <div className='hostel_name'>

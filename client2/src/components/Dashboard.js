@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import defaultProfilePic from "../images/user.png";
 import { Button, Modal } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Complaintcard from "./Complaintcard";
 import Error from "./Error";
-import { redirect_to_dashboard } from "../redux/studentSlice";
+import { change_in_prof_img, redirect_to_dashboard } from "../redux/studentSlice";
 // import menu from "../images/menu.png"
 import Footer from "./Footer";
 import { styled } from '@mui/material/styles';
@@ -21,10 +21,10 @@ import '../css/dashboard.css'
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconFilled': {
-    color: '#ff6d75',
+    color: '#faaf00f7',
   },
   '& .MuiRating-iconHover': {
-    color: '#ff3d47',
+    color: '#faaf00f7',
   },
 });
 
@@ -70,6 +70,51 @@ const Dashboard = () => {
   const openFeedback = () => setShowFeedback(true);
   const closeFeedback = () => setShowFeedback(false);
 
+
+  const [profilePic, setProfilePic] = useState(defaultProfilePic);
+  const fileInputRef = useRef(null);
+
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      // console.log("images-",event.target.files[0]);
+      const formData = new FormData();
+      formData.append('file', event.target.files[0]);
+      
+      axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
+      .then(res => {
+        if(res.data.status==200){
+          const newImage = res.data.data.url;
+          // setProfilePic(newImage);
+          const prof_image = { image_url: newImage };
+
+          return axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/uploadProfile`, prof_image, {
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': localStorage.getItem('token')
+              }
+          });
+        }
+        else{
+          toast.error("Failed to upload image. Please try again.");
+        }
+      })
+      .then(res => {
+        toast.success("image uploaded successfully");
+      })
+      .catch(error => {
+        toast.error("Failed to upload image. Please try again.");
+      });
+
+    }
+    else{
+      toast.error("Add file correctly");
+    }
+  };
+
   //give feedback
   const handleFeedback = (e) => {
     e.preventDefault();
@@ -81,7 +126,7 @@ const Dashboard = () => {
         dinnerRating - 1
     ];
 
-    console.log("Adjusted Ratings:", adjustedRatings);
+    // console.log("Adjusted Ratings:", adjustedRatings);
 
     axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/giveFeedback`, {
         ratings: adjustedRatings
@@ -116,16 +161,14 @@ const Dashboard = () => {
 
   const handleBills = (e) =>{
     e.preventDefault();
-    console.log(date)
-    console.log(typeof date)
     axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/getBills`,
       {date: date},
     ).then(res => {
       setBills(res.data.data);
-      console.log("Response:", res.data.data);
   })
   .catch(err => {
-      console.error("Error fetching bills:", err);
+      // console.error("Error fetching bills:", err);
+      toast.error("Error in fetching bills");
   });
   }
   
@@ -151,13 +194,25 @@ const Dashboard = () => {
         // console.log(response)
         if (response.data.status === 200) {
           const studentData = response.data.data;
+          // console.log("data-stu",studentData.profileImg);
+          if(studentData.profileImg){
+            dispatch(
+              change_in_prof_img({
+                image: studentData.profileImg,
+              })
+            )
+            setProfilePic(studentData.profileImg);
+          }
+
+
           // console.log(studentData.name,studentData.email,studentData.regNo,studentData.hostelName);
           if(studentData.feePaid===true){
             axios.get(`${process.env.REACT_APP_BACK_END_URL}/student/hostelExpensePerPerson`).then((response)=>{
               setstAmount(studentData.feeAmount-response.data.data.expense)
             }).catch((error)=>{
               setstAmount(undefined)
-              console.log("error"+error);
+              // console.log("error"+error);
+              toast.error(error);
             })
           }
           else{
@@ -207,10 +262,11 @@ const Dashboard = () => {
       .then((res) => {
         // console.log(res.data);
         dispatch(add_complaint(res.data.data));
-        toast.success("success");
+        toast.success("Complaint added successfully");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
+        toast.error("err in adding complaint");
       });
   };
 
@@ -247,9 +303,12 @@ const Dashboard = () => {
 
           const jsonResponse = await validateResponse.json();
 
-          console.log('jsonResponse', jsonResponse);
+          // console.log('jsonResponse', jsonResponse);
           if(jsonResponse.status===200){
             toast.success("Payment successfull");
+          }
+          else{
+            toast.error("Payment not successfull");
           }
         },
         prefill: {
@@ -284,8 +343,8 @@ const Dashboard = () => {
   };
 
   const profilePicStyle = {
-    width: "50px",
-    height: "50px",
+    width: "13%",
+    // height: "50px",
     borderRadius: "50%",
     objectFit: "cover",
   };
@@ -320,11 +379,26 @@ const Dashboard = () => {
           <div className="row">
             <div className="col-md-6 custom-left" align="left">
             {/* <div className="col-md-1 d-flex justify-content-center align-items-center"> */}
-              <img
+              {/* <img
                 src={defaultProfilePic}
                 alt="Profile"
                 style={profilePicStyle}
+              /> */}
+            <div className="profile-pic-container" onClick={handleImageClick}>
+              <img
+                src={profilePic}
+                alt="Profile"
+                style={profilePicStyle}
               />
+              <div className="update-overlay">Edit</div>
+              <input
+                type="file"
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+              />
+            </div>
             {/* </div> */}
               <p style={{marginTop:'2px',marginBottom:'2px'}}>Name: {studentData.name}</p>
               <p>Registration Number: {studentData.regNo}</p>
@@ -481,13 +555,14 @@ const Dashboard = () => {
           <Modal.Body style={{backgroundColor:'#2d4e6b',color:'whitesmoke'}}>
             <Typography component="legend">Morning Breakfast:</Typography>
             <StyledRating
+              color="yellow"
               name="morning"
               value={morningRating}
               onChange={(event, newValue) => {
                 setMorningRating(newValue);
               }}
-              icon={<FavoriteIcon fontSize="inherit" />}
-              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+              // icon={<Rating name="size-large" defaultValue={2} size="large" />}
+              // emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
             /><br/>
             <Typography component="legend">Lunch:</Typography>
             <StyledRating
@@ -496,8 +571,8 @@ const Dashboard = () => {
               onChange={(event, newValue) => {
                 setLunchRating(newValue);
               }}
-              icon={<FavoriteIcon fontSize="inherit" />}
-              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+              // icon={<FavoriteIcon fontSize="inherit" />}
+              // emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
             /><br/>
             <Typography component="legend">Evening Breakfast:</Typography>
             <StyledRating
@@ -506,8 +581,8 @@ const Dashboard = () => {
               onChange={(event, newValue) => {
                 setEveningRating(newValue);
               }}
-              icon={<FavoriteIcon fontSize="inherit" />}
-              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+              // icon={<FavoriteIcon fontSize="inherit" />}
+              // emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
             /><br/>
             <Typography component="legend">Dinner:</Typography>
             <StyledRating
@@ -516,8 +591,8 @@ const Dashboard = () => {
               onChange={(event, newValue) => {
                 setDinnerRating(newValue);
               }}
-              icon={<FavoriteIcon fontSize="inherit" />}
-              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+              // icon={<FavoriteIcon fontSize="inherit" />}
+              // emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
             />
           </Modal.Body>
           <Modal.Footer style={{backgroundColor:'#285780'}}>

@@ -50,7 +50,18 @@ const createWarden = async function(data){
     return response;
 }
 const getWardenById = async function(_id){
-    return await WardenSchema.findById(_id);
+    let warden = await WardenSchema.findById(_id);
+    if(warden){ 
+        return {
+            name: warden.name,
+            email: warden.email,
+            hostelName: warden.hostelName,
+            profileImg: warden.profileImg
+        };
+    }
+    else{
+        return null;
+    }
 }
 
 const getAllUnassginedWarden = async function(){
@@ -75,4 +86,4 @@ const addImage = async function(data){
     return true;
 }
 
-module.exports = {getAllUnassginedWarden, addHostelToWarden, isValidWardenId, isValidWarden, createWarden, isValidWardenEmail, isValidWardenRecoveryEmail, getWardenById, getWardenByEmail, isValidWarden}
+module.exports = {addImage,getAllUnassginedWarden, addHostelToWarden, isValidWardenId, isValidWarden, createWarden, isValidWardenEmail, isValidWardenRecoveryEmail, getWardenById, getWardenByEmail, isValidWarden}

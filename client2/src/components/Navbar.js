@@ -110,7 +110,7 @@ const Navbar = () => {
       >
         Contributors
       </Link>
-      <Link
+      {/* <Link
         to="/register"
         style={{
           ...linkStyle,
@@ -120,7 +120,7 @@ const Navbar = () => {
         onMouseLeave={handleMouseLeave}
       >
         Register
-      </Link>
+      </Link> */}
                 
                 <select
                   style={selectStyle}

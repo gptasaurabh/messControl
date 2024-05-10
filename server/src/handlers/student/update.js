@@ -2,7 +2,7 @@ const { addImage } = require("../../database/operations/studentOp")
 
 const uploadStudentProfile = async function(req, res){
     try{
-        if(await addImage({studentId: req.sid, image_url: req.data.image_url})){
+        if(await addImage({studentId: req.sid, image_url: req.body.image_url})){
             res.send({status: 200, data: {message: "Successfully updated the image"}});
         }
         else

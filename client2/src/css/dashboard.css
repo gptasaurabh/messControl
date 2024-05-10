@@ -35,7 +35,56 @@
   flex-direction: column;
   overflow: scroll;
 }
-@media (max-width: 767px) {
+
+.profile-pic-container {
+  position: relative;
+  width: fit-content;
+}
+
+.update-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  width:55px;
+  height: 55px;
+}
+.overlay-update-warden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  width:55px;
+  height: 55px;
+}
+
+.profile-pic-container:hover .overlay-update-warden {
+  opacity: 1;
+}
+.profile-pic-container:hover .update-overlay {
+  opacity: 1;
+}
+
+
+@media (max-width: 768px) {
   .custom-left{
     display: flex;
     flex-direction: column;
@@ -55,6 +104,11 @@
   }
   .ward-text{
     font-size: 21px;
+  }
+  .profile-pic-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   @media (max-width: 575px) {
