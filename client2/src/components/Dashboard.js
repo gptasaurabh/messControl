@@ -44,7 +44,7 @@ const Dashboard = () => {
   const [dinnerRating, setDinnerRating] = useState(2);
   const [amount,setAmount] = useState();
   const [stAmount,setstAmount] = useState();
-  const menu = wardenData.menu;
+  let menu = wardenData.menu;
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
 
@@ -64,7 +64,21 @@ const Dashboard = () => {
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
-  const openMenu = () => setShowMenu(true);
+  const openMenu = () => {
+    setShowMenu(true)
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/student/messMenu`).then(res=>{
+      if(res.data.status===200){
+        menu = res.data.data.messMenu;
+      }
+      else{
+        console.log("Mess menu load error:");
+        menu='';
+      }
+    }).catch(err=>{
+      console.log(err);
+      menu='';
+    })
+  };
   const closeMenu = () => setShowMenu(false);
 
   const openFeedback = () => setShowFeedback(true);
@@ -175,7 +189,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchComplaintData();
-    const intervalId = setInterval(fetchComplaintData, 30000);
+    const intervalId = setInterval(fetchComplaintData, 1000);
     return () => {
       clearInterval(intervalId);
     };
@@ -257,34 +271,51 @@ const Dashboard = () => {
 
   const handleComplaint = (e) => {
     e.preventDefault();
+    if(proofImage){
+      const formData = new FormData();
+      formData.append('file', proofImage);
 
-    const formData = new FormData();
-    formData.append('file', proofImage);
-
-    axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
-      .then(res => {
-        // setProofImage(res.data.data.url);
-        const image_url=res.data.data.url;
-        // console.log("hellods--",image_url,res.data.data.url);
-        axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/addComplaint`, {
-            title,
-            description,
-            image_url,
-            studentName,
-          })
-          .then((res) => {
-            // console.log(res.data);
-            dispatch(add_complaint(res.data.data));
-            toast.success("Complaint added successfully");
-          })
-          .catch((err) => {
-            // console.log(err);
-            toast.error("err in adding complaint");
-          });
+      axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
+        .then(res => {
+          // setProofImage(res.data.data.url);
+          const image_url=res.data.data.url;
+          // console.log("hellods--",image_url,res.data.data.url);
+          axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/addComplaint`, {
+              title,
+              description,
+              image_url,
+              studentName,
+            })
+            .then((res) => {
+              // console.log(res.data);
+              dispatch(add_complaint(res.data.data));
+              toast.success("Complaint added successfully");
+            })
+            .catch((err) => {
+              // console.log(err);
+              toast.error("err in adding complaint");
+            });
+        })
+        .catch(err => {
+          toast.error(err);
+        })
+    }
+    else{
+      axios.post(`${process.env.REACT_APP_BACK_END_URL}/student/addComplaint`, {
+        title,
+        description,
+        studentName,
       })
-      .catch(err => {
-        toast.error(err);
+      .then((res) => {
+        // console.log(res.data);
+        dispatch(add_complaint(res.data.data));
+        toast.success("Complaint added successfully");
       })
+      .catch((err) => {
+        console.log(err);
+        toast.error("err in adding complaint");
+      });
+    }
   };
 
 

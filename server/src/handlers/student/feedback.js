@@ -18,7 +18,7 @@ const getFeedback = async (req, res) =>{
         let {start_date,end_date} = req.body;
         // console.log(req.body);
         let response = await getFeedbackByDate({start_date: start_date, end_date: end_date})
-        console.log("hello from backend",response);
+        // console.log("hello from backend",response);
         const rows = 4;
         const cols = 5;
         const result = [];

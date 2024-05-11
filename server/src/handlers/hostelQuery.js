@@ -55,7 +55,7 @@ const updateMessMenuWarden = async function(req, res){
     }
     catch(err){
         console.log("Error in update mess menu: "+err);
-        res.send({status: 400, data:{message: "Error: Menu not updated"}})
+        res.send({status: 400, message: "Error: Menu not updated"})
     }
 }
 

@@ -37,7 +37,7 @@ const Complaintcard = ({ complaint, showMyComplaints }) => {
   const studentDetails_name = useSelector( state => state.students.name);
   const wardenData = useSelector( state => state.wardens.name);
 
-  console.log("complaint card",complaint,showMyComplaints);
+  // console.log("complaint card",complaint,showMyComplaints);
 
 
   useEffect(() => {
@@ -229,7 +229,7 @@ const handleDownClick = async () => {
             )}
           </div>
         </div>
-        <a href={complaint.proofImg} style={{display:'flex',justifyContent:'center',alignItems:'center'}}><p style={{color:'white'}}>view image</p></a>
+        <a href={complaint.proofImg} target="_blank" style={{display:'flex',justifyContent:'center',alignItems:'center'}}><p style={{color:'white'}}>view image</p></a>
         <div className="comment text-decoration-none text-lowercase">
           <Button
             variant="link"

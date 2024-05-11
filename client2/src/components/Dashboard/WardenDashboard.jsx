@@ -42,7 +42,7 @@ const WardenDashboard = () => {
 
   useEffect(() => {
     fetchComplaintData();
-    const intervalId = setInterval(fetchComplaintData, 30000);
+    const intervalId = setInterval(fetchComplaintData, 1000);
     return () => {
       clearInterval(intervalId);
     };
@@ -102,9 +102,18 @@ const WardenDashboard = () => {
 
     axios.post(`${process.env.REACT_APP_BACK_END_URL}/fileUpload/`, formData)
       .then(res => {
-        dispatch(menu_uploaded(res.data.data.url));
-        setUpdateMenu(false);
-        toast.success('Menu updated successfully');
+        axios.post(`${process.env.REACT_APP_BACK_END_URL}/warden/uploadMenu`,{menu_url: res.data.data.url}).then(res2=>{
+          if(res2.data.status===200){
+            dispatch(menu_uploaded(res.data.data.url));
+            setUpdateMenu(false);
+            toast.success('Menu updated successfully');
+          }
+          else{
+            toast.error(res2.data.message);
+          }
+        }).catch(err=>{
+          toast.error('Menu update failed');
+        });
       })
       .catch(err => {
         toast.error(err);
@@ -145,8 +154,18 @@ const WardenDashboard = () => {
 
   const openMenu = () => {
     setShowMenu(true);
-    console.log(wardenData.menu);
-    setMessMenuImageUrl(wardenData.menu);
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/warden/messMenu`).then(res=>{
+      if(res.data.status===200){
+        setMessMenuImageUrl(res.data.data.messMenu);
+      }
+      else{
+        console.log("Mess menu load error:");
+        setMessMenuImageUrl('');
+      }
+    }).catch(err=>{
+      console.log(err);
+      setMessMenuImageUrl('');
+    })
   };
   const closeMenu = () => setShowMenu(false);
   const openFeedback = () => setShowFeedback(true);
