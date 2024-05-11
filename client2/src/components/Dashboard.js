@@ -696,7 +696,7 @@ const Dashboard = () => {
             {bills.length > 0 ? (
                 bills.map((bill, index) => (
                   <div key={index} style={{ padding: '10px', backgroundColor: '#fff', marginBottom: '5px', borderRadius: '5px' }}>
-                    <p><strong>Amount:</strong> ${bill.amount}</p>
+                    <p><strong>Amount:</strong> ₹{bill.amount}</p>
                     <p><strong>Date:</strong> {new Date(bill.date).toLocaleDateString()}</p>
                     <p><strong>Receipt:</strong> <a href={bill.image_url} target="_blank" rel="noopener noreferrer">View Image</a></p>
                   </div>
