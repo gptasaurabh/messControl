@@ -44,7 +44,7 @@ const Dashboard = () => {
   const [dinnerRating, setDinnerRating] = useState(2);
   const [amount,setAmount] = useState();
   const [stAmount,setstAmount] = useState();
-  let menu = wardenData.menu;
+  const [menu,setMenu] = useState('');
   const myComplaints = useSelector((state) => state.complaints.myComplaints);
   const allComplaints = useSelector((state) => state.complaints.complaints);
 
@@ -65,19 +65,22 @@ const Dashboard = () => {
   const closeModal = () => setShowModal(false);
 
   const openMenu = () => {
-    setShowMenu(true)
+    console.log("STUDENT MENU---->");
     axios.get(`${process.env.REACT_APP_BACK_END_URL}/student/messMenu`).then(res=>{
       if(res.data.status===200){
-        menu = res.data.data.messMenu;
+        console.log("MESS MENU BACK-===>",res);
+        setMenu(res.data.data.messMenu);
       }
       else{
         console.log("Mess menu load error:");
-        menu='';
+        setMenu('');
       }
     }).catch(err=>{
       console.log(err);
-      menu='';
+      setMenu('');
     })
+    
+    setShowMenu(true)
   };
   const closeMenu = () => setShowMenu(false);
 
@@ -189,7 +192,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchComplaintData();
-    const intervalId = setInterval(fetchComplaintData, 1000);
+    const intervalId = setInterval(fetchComplaintData, 10000);
     return () => {
       clearInterval(intervalId);
     };
