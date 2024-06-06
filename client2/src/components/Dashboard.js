@@ -192,7 +192,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchComplaintData();
-    const intervalId = setInterval(fetchComplaintData, 10000);
+    const intervalId = setInterval(fetchComplaintData, 1000);
     return () => {
       clearInterval(intervalId);
     };
