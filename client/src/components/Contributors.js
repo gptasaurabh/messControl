@@ -99,10 +99,10 @@ const Contributors = () => {
               imageSrc={img}
             />
             <Contributor
-              name="Sourav Gupta"
+              name="Saurabh Gupta"
               contribution="Designing React Components for Enhanced User Interaction"
-              linkedin="https://www.linkedin.com/in/puneet-chauhan-a03a69226/"
-              github="https://github.com/puneet2003"
+              linkedin="https://www.linkedin.com/in/saurabh-gupta-599503258/"
+              github="https://github.com/gptasaurabh/messControl/tree/main"
               imageSrc={img}
             />
           </div>
